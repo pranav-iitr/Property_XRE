@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "floors",
+  "info": {
+    "singularName": "floor",
+    "pluralName": "floors",
+    "displayName": "Floor",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "floorId": {
+      "type": "customField",
+      "options": {
+        "uuid-format": "^[A-Z0-9]{7}$"
+      },
+      "customField": "plugin::strapi-advanced-uuid.uuid"
+    },
+    "floorNumber": {
+      "type": "integer"
+    },
+    "floorArea": {
+      "type": "integer"
+    },
+    "totalUnitsInFloor": {
+      "type": "integer"
+    },
+    "numberAvailableUnits": {
+      "type": "integer"
+    },
+    "floorPlan": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "units": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::unit.unit",
+      "mappedBy": "floor"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "floors"
+    }
+  }
+}

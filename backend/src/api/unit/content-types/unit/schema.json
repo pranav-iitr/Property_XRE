@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "units",
+  "info": {
+    "singularName": "unit",
+    "pluralName": "units",
+    "displayName": "Unit"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "unitId": {
+      "type": "customField",
+      "options": {
+        "uuid-format": "^[A-Z0-9]{8}$"
+      },
+      "customField": "plugin::strapi-advanced-uuid.uuid"
+    },
+    "unitNumber": {
+      "type": "integer"
+    },
+    "unitArea": {
+      "type": "integer"
+    },
+    "floor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::floor.floor",
+      "inversedBy": "units"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "units"
+    },
+    "availabilityFor": {
+      "type": "enumeration",
+      "enum": [
+        "lease",
+        "sale",
+        "both",
+        "none"
+      ]
+    },
+    "askingRental": {
+      "type": "integer"
+    },
+    "furnishingStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Furnished",
+        "Semi Furnished",
+        "Un Furnished"
+      ]
+    },
+    "numberOfParkings": {
+      "type": "integer"
+    },
+    "contacts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::person.person"
+    }
+  }
+}
