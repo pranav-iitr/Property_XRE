@@ -1,15 +1,11 @@
-import AppHeader from '../components/AppHeader'
-import AppBreadCrumb from '../components/AppBreadCrumb'
-import PropertyHeader from '../components/PropertyHeader'
-import AppliedFiltersBar from '../components/AppliedFiltersBar'
-import PropertyListing from '../components/PropertyListing'
-import PropertiesPagination from '../components/PropertiesPagination'
+import PropertyHeader from '../components/property/PropertyHeader'
+import AppliedFiltersBar from '../components/property/AppliedFiltersBar'
+import PropertyListing from '../components/property/PropertyListing'
+import PropertiesPagination from '../components/property/PropertiesPagination'
 
 const Properties = () => {
   return (
     <div>
-      <AppHeader />
-      <AppBreadCrumb />
       <PropertyHeader />
       <AppliedFiltersBar />
       <PropertyListing />

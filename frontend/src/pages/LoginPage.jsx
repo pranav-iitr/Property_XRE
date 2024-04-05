@@ -27,8 +27,7 @@ const LoginPage = () => {
         identifier: registerData.email,
         password: registerData.password,
       });
-      console.log("User registered successfully!", res.data);
-      navigate("/dashboard");
+      navigate("/property");
     } catch (error) {
       console.error("Error registering:", error);
     }

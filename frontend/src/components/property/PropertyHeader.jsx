@@ -1,6 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, XMarkIcon , ChevronDownIcon } from '@heroicons/react/24/outline'
+import {useNavigate} from 'react-router-dom'
+
 export const handleSearchFilter = (value, setFileteredPropertyList, allPropertyList) => {
     if (value === "all") {
         setFileteredPropertyList(allPropertyList);
@@ -87,6 +89,9 @@ const SearchInput = () => {
 }
 
 export default function PropertyHeader() {
+
+    const navigate = useNavigate()
+
     return (
         <Disclosure as="header" className="border-b px-4">
             {({ open }) => (
@@ -120,6 +125,7 @@ export default function PropertyHeader() {
                                 <button
                                     type="button"
                                     className="inline-flex items-center justify-center rounded-md bg-red-900 px-3 py-2 text-sm font-light text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    onClick={() => navigate("/property/add-new")}
                                 >
                                     Add New
                                 </button>
