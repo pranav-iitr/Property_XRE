@@ -48,9 +48,9 @@ export default function AppBreadCrumb() {
             </a>
           </div>
         </li>
-        {breadCrumbList.map((page) => {
+        {breadCrumbList.map((page, index) => {
           return (
-            <li key={page} className="flex">
+            <li key={index} className="flex">
               <div className="flex items-center">
                 <svg
                   className="h-full w-6 flex-shrink-0 text-gray-200"
