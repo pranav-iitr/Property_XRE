@@ -27,6 +27,7 @@ const LoginPage = () => {
         identifier: registerData.email,
         password: registerData.password,
       });
+      localStorage.setItem('token', res.data.jwt);
       navigate("/property");
     } catch (error) {
       console.error("Error registering:", error);

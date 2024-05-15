@@ -1,9 +1,27 @@
+import { useEffect } from "react";
+import { useMatchStore } from "../../../store/projectStore";
 import AreaInputWithDropdown from "../../common/AreaInputWithDropdown";
 import CustomInput from "../../common/CustomInput";
+import { getOnePerson } from "../../../utils/api";
 
 export default function OwnerInformation(props) {
+  const { personId } = useMatchStore();
   const { updateInputValue, getValue } = props;
   const type = "ownerInformation";
+
+  useEffect(() => {
+    const unMount = async () => {
+      const res = await getOnePerson(personId);
+      console.log(res);
+      updateInputValue(res.data.data.attributes.name, null, "ownerInformation", 'name')
+      updateInputValue(res.data.data.attributes.email, null, "ownerInformation", 'email')
+      updateInputValue(res.data.data.attributes.phone, null, "ownerInformation", 'mobileNumber')
+
+    }
+    if (personId) {
+      unMount();
+    }
+  }, [])
   return (
     <>
       <div className="space-y-12">

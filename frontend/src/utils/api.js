@@ -48,3 +48,49 @@ export const sendPersonInfo = async (data) => {
   );
   return response;
 }
+
+export const getAllProjects = async () => {
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/projects`);
+  return response;
+}
+
+export const getOneProject = async (id) => {
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/projects/${id}`);
+  return response;
+}
+
+export const getOneFloor = async (id) => {
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/floors/${id}`);
+  return response;
+}
+
+export const getOneUnit = async (id) => {
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/units/${id}`);
+  return response;
+}
+
+export const getOnePerson = async (id) => {
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/persons/${id}`);
+  return response;
+}
+
+
+export const updateOneProject = async (data, id) => {
+  const response = await axios.put(`${import.meta.env.VITE_STRAPI_URL}/projects/${id}`, data);
+  return response;
+}
+
+export const updateOneFloor = async (data, id) => {
+  const response = await axios.put(`${import.meta.env.VITE_STRAPI_URL}/floors/${id}`, data);
+  return response;
+}
+
+export const updateOneUnit = async (data, id) => {
+  const response = await axios.put(`${import.meta.env.VITE_STRAPI_URL}/units/${id}`, data);
+  return response;
+}
+
+export const updateOnePerson = async (data, id) => {
+  const response = await axios.put(`${import.meta.env.VITE_STRAPI_URL}/persons/${id}`, data);
+  return response;
+}

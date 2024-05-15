@@ -7,7 +7,8 @@ import OwnerInformation from '../components/add-property/ownerInformation'
 import AppPopup from '../components/common/AppPopup'
 import { useNavigate } from "react-router-dom"
 import PropertyInfoDisplay from '../components/add-property/PropertyInfoDisplay'
-import { sendFloorInfo, sendPersonInfo, sendProjectInfo, sendUnitInfo } from '../utils/api'
+import { sendFloorInfo, sendPersonInfo, sendProjectInfo, sendUnitInfo, updateOneFloor, updateOnePerson, updateOneProject, updateOneUnit } from '../utils/api'
+import { useMatchStore } from '../store/projectStore'
 
 
 const fetchInitialValue = () => {
@@ -22,14 +23,20 @@ const fetchInitialValue = () => {
 
 const AddPropertyPage = () => {
   const [formData, setFormData] = useState(fetchInitialValue())
-  const [currentFormIndex, setCurrentFormIndex] = useState(0)
+  const { personId, floorId, unitId, projectId, setProjectId, setFloorId, setUnitId, setPersonId, currentFormIndex, setCurrentFormIndex } = useMatchStore();
   const [popup, setPopup] = useState(false);
+
 
 
   const navigate = useNavigate();
 
-  const updateInputValue = (value, event, type) => {
-    const name = event?.target?.name
+  const updateInputValue = (value, event, type, check = null) => {
+    let name = null;
+    if (check) {
+      name = check;
+    } else {
+      name = event?.target?.name
+    }
     const newFormData = { ...formData }
     newFormData[type][name] = value
 
@@ -88,51 +95,228 @@ const AddPropertyPage = () => {
     e.preventDefault();
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 1:
-        await sendProjectInfo({
-          data: { Name: formData.projectInformation.name }
-        });
+        if (projectId) {
+          await updateOneProject({
+            data: { Name: formData.projectInformation.name }
+          }, projectId);
+        } else {
+          const infoProject = await sendProjectInfo({
+            data: { Name: formData.projectInformation.name }
+          });
+          setProjectId(infoProject.data.data.id);
+        }
         break;
       case 2:
-        console.log(formData);
-        await sendFloorInfo({
-          data: {
-            floorArea: Number(formData.floorInformation["floorArea"]),
-            floorNumber: Number(formData.floorInformation["floorNumber"]),
-            numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
-            totalUnitsInFloor: Number(formData.floorInformation["totalUnits"])
-          }
-        })
+        if (floorId) {
+          await updateOneFloor({
+            data: {
+              floorArea: Number(formData.floorInformation["floorArea"]),
+              floorNumber: Number(formData.floorInformation["floorNumber"]),
+              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
+              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
+              project: {
+                connect: [{ id: projectId }],
+              },
+            }
+          }, floorId)
+        } else {
+          const infoFloor = await sendFloorInfo({
+            data: {
+              floorArea: Number(formData.floorInformation["floorArea"]),
+              floorNumber: Number(formData.floorInformation["floorNumber"]),
+              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
+              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
+              project: {
+                connect: [{ id: projectId }],
+              },
+            }
+          })
+          setFloorId(infoFloor.data.data.id);
+        }
         break;
       case 3:
-        console.log(formData);
-        await sendUnitInfo({
-          data: {
-            askingRental: Number(formData.unitInformation["askingRental"]),
-            availabilityFor: Number(formData.unitInformation["availabilityFor"]),
-            furnishingStatus: Number(formData.unitInformation["furnishingStatus"]),
-            numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
-            unitArea: Number(formData.unitInformation["unitArea"]),
-            unitNumber :Number(formData.unitInformation["unitNumber"]),
-          }
-        })
+        if (unitId) {
+          await updateOneUnit({
+            data: {
+              askingRental: Number(formData.unitInformation["askingRental"]),
+              availabilityFor: formData.unitInformation["availabilityFor"],
+              furnishingStatus: formData.unitInformation["furnishingStatus"],
+              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
+              unitArea: Number(formData.unitInformation["unitArea"]),
+              unitNumber: Number(formData.unitInformation["unitNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          }, unitId)
+        } else {
+          const infoUnit = await sendUnitInfo({
+            data: {
+              askingRental: Number(formData.unitInformation["askingRental"]),
+              availabilityFor: formData.unitInformation["availabilityFor"],
+              furnishingStatus: formData.unitInformation["furnishingStatus"],
+              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
+              unitArea: Number(formData.unitInformation["unitArea"]),
+              unitNumber: Number(formData.unitInformation["unitNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          })
+          setUnitId(infoUnit.data.data.id);
+        }
         break;
       case 4:
-        console.log(formData);
-        await sendPersonInfo({
-          data: {
-            email: Number(formData.ownerInformation["email"]),
-            name: Number(formData.ownerInformation["name"]),
-            phone: Number(formData.ownerInformation["mobileNumber"]),
-          }
-        })
+        if (personId) {
+          console.log(formData.ownerInformation);
+          await updateOnePerson({
+            data: {
+              email: formData.ownerInformation["email"],
+              name: formData.ownerInformation["name"],
+              phone: Number(formData.ownerInformation["mobileNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          }, personId)
+        } else {
+          const infoPerson = await sendPersonInfo({
+            data: {
+              email: formData.ownerInformation["email"],
+              name: formData.ownerInformation["name"],
+              phone: Number(formData.ownerInformation["mobileNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          })
+          setPersonId(infoPerson.data.data.id);
+        }
+        navigate('/property');
+        setCurrentFormIndex(0);
+        setFloorId(null);
+        setPersonId(null);
+        setProjectId(null);
+        setUnitId(null);
+
         break;
       default:
         console.log(formData);
     }
-
-
     handleNextForm()
   }
+
+  const onSaveDraft = async (e) => {
+    e.preventDefault();
+    switch (AddPropertyStepConstant[currentFormIndex].id) {
+      case 1:
+        if (projectId) {
+          await updateOneProject({
+            data: { Name: formData.projectInformation.name }
+          }, projectId);
+        } else {
+          const infoProject = await sendProjectInfo({
+            data: { Name: formData.projectInformation.name }
+          });
+          setProjectId(infoProject.data.data.id);
+        }
+        navigate('/property');
+        break;
+      case 2:
+        if (floorId) {
+          await updateOneFloor({
+            data: {
+              floorArea: Number(formData.floorInformation["floorArea"]),
+              floorNumber: Number(formData.floorInformation["floorNumber"]),
+              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
+              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
+              project: {
+                connect: [{ id: projectId }],
+              },
+            }
+          }, floorId)
+        } else {
+          const infoFloor = await sendFloorInfo({
+            data: {
+              floorArea: Number(formData.floorInformation["floorArea"]),
+              floorNumber: Number(formData.floorInformation["floorNumber"]),
+              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
+              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
+              project: {
+                connect: [{ id: projectId }],
+              },
+            }
+          })
+          setFloorId(infoFloor.data.data.id);
+        }
+        navigate('/property');
+        break;
+      case 3:
+        if (unitId) {
+          await updateOneUnit({
+            data: {
+              askingRental: Number(formData.unitInformation["askingRental"]),
+              availabilityFor: formData.unitInformation["availabilityFor"],
+              furnishingStatus: formData.unitInformation["furnishingStatus"],
+              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
+              unitArea: Number(formData.unitInformation["unitArea"]),
+              unitNumber: Number(formData.unitInformation["unitNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          }, unitId)
+        } else {
+          const infoUnit = await sendUnitInfo({
+            data: {
+              askingRental: Number(formData.unitInformation["askingRental"]),
+              availabilityFor: formData.unitInformation["availabilityFor"],
+              furnishingStatus: formData.unitInformation["furnishingStatus"],
+              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
+              unitArea: Number(formData.unitInformation["unitArea"]),
+              unitNumber: Number(formData.unitInformation["unitNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          })
+          setUnitId(infoUnit.data.data.id);
+        }
+        navigate('/property');
+        break;
+      case 4:
+        console.log(formData);
+        if (personId) {
+          await updateOnePerson({
+            data: {
+              email: formData.ownerInformation["email"],
+              name: formData.ownerInformation["name"],
+              phone: Number(formData.ownerInformation["mobileNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          }, personId)
+        } else {
+          const infoPerson = await sendPersonInfo({
+            data: {
+              email: formData.ownerInformation["email"],
+              name: formData.ownerInformation["name"],
+              phone: Number(formData.ownerInformation["mobileNumber"]),
+              project: {
+                connect: [{ id: projectId }],
+              }
+            }
+          })
+          setPersonId(infoPerson.data.data.id);
+        }
+        navigate('/property');
+        break;
+      default:
+        console.log(formData);
+    }
+  }
+
 
   const showFormBasedOnId = () => {
     switch (AddPropertyStepConstant[currentFormIndex].id) {
@@ -165,65 +349,6 @@ const AddPropertyPage = () => {
     }
   }
 
-  // const handleCreatePropertyApi = async (status) => {
-  //   const apiUrl = "/api/property/create";
-  //   const payload = {
-  //     projectName: formData["project_name"],
-  //     plotNumber: formData["plot_number"],
-  //     totalNumOfFloors: formData["num_of_floors"],
-  //     totalBasements: formData["total_basements"],
-  //     totalArea: formData["total_area"],
-  //     vacantArea: formData["vacant_area"],
-  //     occupiedArea: formData["occupied_area"],
-  //     features: formData["features"],
-  //     perFloorSize: formData["per_floor_size"],
-  //     buildingType: formData["building_type"],
-  //     powerBackup: formData["power_backup"],
-  //     airConditioning: formData["air_conditioning"],
-  //     states: formData["states"],
-  //     city: formData["city"],
-  //     zone: formData["zone"],
-  //     projectPhoto: "dummy",
-  //     location: "dummy",
-
-  //     // unit information
-  //     unitInformation: formData["unit_number"],
-  //     unitArea: formData["unit_area"],
-  //     askingRental: formData["asking_rental"],
-  //     noOfParking: formData["no_of_parkings"],
-  //     availablityFor: formData["availability_for"],
-  //     furnishingStatus: formData["furnishing_status"],
-  //     ageOfFurnishing: formData["age_of_furnishing"],
-
-  //     // floor information
-  //     floorNumber: formData["floor_number"],
-  //     totalUnits: formData["total_units"],
-  //     unitsAvailable: formData["units_available"],
-  //     floorArea: formData["floor_area"],
-  //     floorPlanPhoto: "dummy",
-
-  //     //owner information
-  //     ownerName: formData["owner_name"],
-  //     ownerEmail: formData["owner_email"],
-  //     ownerPhoneNumber: formData["owner_mobile_number"],
-  //     concernedPerson: formData["concerned_person"],
-  //     camCharges: formData["cm_charges"],
-  //     ...status ? { propertyStatus: status } : {}
-  //   }
-  //   const requestData = {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-
-  //     body: JSON.stringify(payload),
-  //   };
-
-  //   const response = await fetch(apiUrl, requestData);
-  //   setPopup(true)
-  // }
-
-
   const showProjectInfoOnTop = () => {
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 2:
@@ -252,6 +377,7 @@ const AddPropertyPage = () => {
         break;
     }
   }
+
   return (
     <>
       <div className='flex justify-center gap-8 mt-4'>
@@ -269,7 +395,7 @@ const AddPropertyPage = () => {
                 <button
                   type="button"
                   className="rounded-md bg-red-100 px-4 py-2 text-sm font-semibold text-red-900 shadow-sm hover:bg-red-100"
-                // onClick={() => handleCreatePropertyApi('draft')}
+                  onClick={onSaveDraft}
                 >
                   Save to Draft
                 </button>

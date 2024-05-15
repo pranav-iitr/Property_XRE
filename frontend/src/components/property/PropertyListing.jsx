@@ -1,6 +1,8 @@
 import { ArrowUpIcon } from "@heroicons/react/20/solid"
+import { useEffect } from "react";
+import { getAllProjects } from "../../utils/api";
 
-const propertydummy =[
+const propertydummy = [
   {
     id: "#00001",
     type: "Commercial",
@@ -67,6 +69,14 @@ const propertydummy =[
 ];
 
 export default function PropertyListing() {
+  useEffect(() => {
+    const unMount = async () => {
+      const projects = await getAllProjects();
+      console.log(projects);
+    }
+    unMount();
+  }, []);
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 lg:mb-6">
       <div className="mt-2 flow-root">
@@ -81,8 +91,8 @@ export default function PropertyListing() {
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-medium text-gray-500 sm:pl-6"
                     >
                       <div className="flex gap-2 items-center">
-                        <p>ID’s</p>  
-                        <ArrowUpIcon className="w-5 h-"/>
+                        <p>ID’s</p>
+                        <ArrowUpIcon className="w-5 h-" />
                       </div>
                     </th>
                     <th
@@ -90,8 +100,8 @@ export default function PropertyListing() {
                       className="px-3 py-3.5 text-sm font-medium text-gray-500 flex justify-center"
                     >
                       <div className="flex gap-2 items-center">
-                        <p>TYPE</p>  
-                        <ArrowUpIcon className="w-5 h-5"/>
+                        <p>TYPE</p>
+                        <ArrowUpIcon className="w-5 h-5" />
                       </div>
                     </th>
                     <th
@@ -136,7 +146,7 @@ export default function PropertyListing() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  { propertydummy.length ? propertydummy.map((property) => (
+                  {propertydummy.length ? propertydummy.map((property) => (
                     <tr key={property.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-6">
                         {property.id}
@@ -164,15 +174,14 @@ export default function PropertyListing() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                         <button
                           type="button"
-                          className={`inline-flex items-center gap-x-1.5 rounded-3xl px-3 py-1 text-sm font-semibold ${
-                            property.status === "Approved"
-                              ? "bg-green-100 text-green-800"
-                              : property.status === "Drafts"
+                          className={`inline-flex items-center gap-x-1.5 rounded-3xl px-3 py-1 text-sm font-semibold ${property.status === "Approved"
+                            ? "bg-green-100 text-green-800"
+                            : property.status === "Drafts"
                               ? "bg-yellow-100 text-yellow-800"
                               : property.status === "Rejected"
-                              ? "bg-red-100 text-red-800"
-                              : ""
-                          }`}
+                                ? "bg-red-100 text-red-800"
+                                : ""
+                            }`}
                         >
                           {property.status}
                         </button>
@@ -187,9 +196,9 @@ export default function PropertyListing() {
                       </td>
                     </tr>
                   )) :
-                   <div className="py-3  flex justify-center">
+                    <div className="py-3  flex justify-center">
                       <h1 className="text-3xl font-bold" >No Match Found</h1>
-                   </div> 
+                    </div>
                   }
                 </tbody>
               </table>

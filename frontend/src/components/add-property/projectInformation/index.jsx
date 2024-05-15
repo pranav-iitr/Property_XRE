@@ -2,16 +2,30 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import AreaInputWithDropdown from "../../common/AreaInputWithDropdown";
 import CustomInput from "../../common/CustomInput";
 import CustomDropdown from "../../common/CustomDropdown";
+import { useEffect } from "react";
+import { useMatchStore } from "../../../store/projectStore";
+import { getOneProject } from "../../../utils/api";
 
 export default function ProjectInformation(props) {
+  const { projectId } = useMatchStore();
   const { updateInputValue, getValue } = props;
   const type = "projectInformation";
   const propertyImage = getValue(type, "propertyImage")
+  useEffect(() => {
+    const unMount = async () => {
+      const res = await getOneProject(projectId);
+      console.log(res);
+      updateInputValue(res.data.data.attributes.Name, null, "projectInformation", 'name')
+    }
+    if (projectId) {
+      unMount();
+    }
+  }, [])
   return (
     <>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-            
+
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Project Information
           </h2>
@@ -199,13 +213,13 @@ export default function ProjectInformation(props) {
                       htmlFor="file-upload"
                       className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
-                      <span onClick={() => document.getElementById('upload-file-input').click()} 
-                      className="file-upload-btn">Upload a file</span>
+                      <span onClick={() => document.getElementById('upload-file-input').click()}
+                        className="file-upload-btn">Upload a file</span>
                       <input
-                         id="upload-file-input"
-                         name="propertyImage"
-                         type="file"
-                    
+                        id="upload-file-input"
+                        name="propertyImage"
+                        type="file"
+
                         className="sr-only"
                         onChange={(e) => {
                           const file = e.target.files[0];
@@ -222,12 +236,12 @@ export default function ProjectInformation(props) {
                 </div>
               </div>
             </div>
-            {propertyImage  
-            ?
+            {propertyImage
+              ?
               <div className="col-span-full justify-self-center">
-                <img src={propertyImage} alt='UploadedImage' className="w-40 h-40 "/> 
+                <img src={propertyImage} alt='UploadedImage' className="w-40 h-40 " />
               </div>
-              : 
+              :
               " "
             }
 

@@ -1,9 +1,31 @@
 import CustomInput from "../../common/CustomInput";
 import CustomDropdown from "../../common/CustomDropdown";
+import { useMatchStore } from "../../../store/projectStore";
+import { useEffect } from "react";
+import { getOneUnit } from "../../../utils/api";
 
 const UnitInformationForm = (props) => {
+  const { unitId } = useMatchStore();
   const { updateInputValue, getValue } = props;
   const type = "unitInformation";
+
+  useEffect(() => {
+    const unMount = async () => {
+      const res = await getOneUnit(unitId);
+      console.log(res);
+      updateInputValue(res.data.data.attributes.unitArea, null, "unitInformation", 'unitArea')
+      updateInputValue(res.data.data.attributes.unitNumber, null, "unitInformation", 'unitNumber')
+      updateInputValue(res.data.data.attributes.numberOfParkings, null, "unitInformation", 'noOfParkings')
+      updateInputValue(res.data.data.attributes.askingRental, null, "unitInformation", 'askingRental')
+      updateInputValue(res.data.data.attributes.furnishingStatus, null, "unitInformation", 'furnishingStatus')
+      updateInputValue(res.data.data.attributes.availabilityFor, null, "unitInformation", 'availabilityFor')
+
+
+    }
+    if (unitId) {
+      unMount();
+    }
+  }, [])
   return (
     <div className="space-y-12">
       <div className="border-b border-gray-900/10 pb-12">
@@ -65,7 +87,7 @@ const UnitInformationForm = (props) => {
           <CustomDropdown
             title="Furnishing Status"
             name="furnishingStatus"
-            options={[{ title: "Furnishing", value: "furnishing" }]}
+            options={[{ title: "Furnished", value: "Furnished" }, { title: "Semi Furnished", value: "Semi Furnished" }, { title: "Un Furnished", value: "Un Furnished" }]}
             inputProps={{
               onChange: (e) => updateInputValue(e.target.value, e, type),
             }}

@@ -7,22 +7,22 @@ const PropertyInfoDisplay = () => {
     <div className='p-6 mb-4 flex justify-between items-center md:shadow-xl rounded-md'>
       <div className='flex gap-4'>
         <div>
-            <img src={newPropertyInfo.projectInformation.propertyImage} className='w-[100px] h-[80px]' alt='property'></img>
+          <img src={newPropertyInfo?.projectInformation?.propertyImage} className='w-[100px] h-[80px]' alt='property'></img>
         </div>
         <div className='flex flex-col gap-2'>
-            <div>
-                <button type="button" className="inline-flex  items-center gap-x-1.5 rounded-3xl bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">
-                    {newPropertyInfo.projectInformation.buildingType}
-                </button>
-            </div>
-            <div>
-              <h2 className='font-bold text-gray-900 text-lg'>{newPropertyInfo.projectInformation.name}</h2>
-            </div>
-            <div>
-              <p className='text-gray-400 text-sm'>
-                {newPropertyInfo.projectInformation.location}
-              </p>
-            </div>
+          <div>
+            <button type="button" className="inline-flex  items-center gap-x-1.5 rounded-3xl bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">
+              {newPropertyInfo?.projectInformation?.buildingType}
+            </button>
+          </div>
+          <div>
+            <h2 className='font-bold text-gray-900 text-lg'>{newPropertyInfo?.projectInformation?.name}</h2>
+          </div>
+          <div>
+            <p className='text-gray-400 text-sm'>
+              {newPropertyInfo?.projectInformation?.location}
+            </p>
+          </div>
         </div>
       </div>
       <div>
