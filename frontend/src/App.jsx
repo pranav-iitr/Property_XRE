@@ -16,7 +16,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/property" element={
+      <Route path="/properties" element={
         <PrivateRoutes>
           <AppHeader />
           <AppBreadCrumb />

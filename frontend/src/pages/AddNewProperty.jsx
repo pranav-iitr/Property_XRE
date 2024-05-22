@@ -1,32 +1,54 @@
-import { useState } from 'react'
-import AddPropertySteps, { AddPropertyStepConstant } from '../components/add-property/AddPropertySteps'
-import ProjectInformation from '../components/add-property/projectInformation'
-import UnitInformationForm from '../components/add-property/unitInformation'
-import FloorInformationForm from '../components/add-property/floorInformation'
-import OwnerInformation from '../components/add-property/ownerInformation'
-import AppPopup from '../components/common/AppPopup'
-import { useNavigate } from "react-router-dom"
-import PropertyInfoDisplay from '../components/add-property/PropertyInfoDisplay'
-import { sendFloorInfo, sendPersonInfo, sendProjectInfo, sendUnitInfo, updateOneFloor, updateOnePerson, updateOneProject, updateOneUnit } from '../utils/api'
-import { useMatchStore } from '../store/projectStore'
-
+import { useState } from "react";
+import AddPropertySteps, {
+  AddPropertyStepConstant,
+} from "../components/add-property/AddPropertySteps";
+import ProjectInformation from "../components/add-property/projectInformation";
+import UnitInformationForm from "../components/add-property/unitInformation";
+import FloorInformationForm from "../components/add-property/floorInformation";
+import OwnerInformation from "../components/add-property/ownerInformation";
+import AppPopup from "../components/common/AppPopup";
+import { useNavigate } from "react-router-dom";
+import PropertyInfoDisplay from "../components/add-property/PropertyInfoDisplay";
+import {
+  sendFloorInfo,
+  sendPersonInfo,
+  sendProjectInfo,
+  sendUnitInfo,
+  updateOneFloor,
+  updateOnePerson,
+  updateOneProject,
+  updateOneUnit,
+} from "../utils/api";
+import { useMatchStore } from "../store/projectStore";
 
 const fetchInitialValue = () => {
-  const isLocalStorageDataExist = JSON.parse(localStorage.getItem('newEntry'));
+  const isLocalStorageDataExist = JSON.parse(localStorage.getItem("newEntry"));
   if (isLocalStorageDataExist) {
-    return isLocalStorageDataExist
+    return isLocalStorageDataExist;
   }
-  return { projectInformation: {}, floorInformation: {}, unitInformation: {}, ownerInformation: {} };
-}
-
-
+  return {
+    projectInformation: {},
+    floorInformation: {},
+    unitInformation: {},
+    ownerInformation: {},
+  };
+};
 
 const AddPropertyPage = () => {
-  const [formData, setFormData] = useState(fetchInitialValue())
-  const { personId, floorId, unitId, projectId, setProjectId, setFloorId, setUnitId, setPersonId, currentFormIndex, setCurrentFormIndex } = useMatchStore();
+  const [formData, setFormData] = useState(fetchInitialValue());
+  const {
+    personId,
+    floorId,
+    unitId,
+    projectId,
+    setProjectId,
+    setFloorId,
+    setUnitId,
+    setPersonId,
+    currentFormIndex,
+    setCurrentFormIndex,
+  } = useMatchStore();
   const [popup, setPopup] = useState(false);
-
-
 
   const navigate = useNavigate();
 
@@ -35,16 +57,16 @@ const AddPropertyPage = () => {
     if (check) {
       name = check;
     } else {
-      name = event?.target?.name
+      name = event?.target?.name;
     }
-    const newFormData = { ...formData }
-    newFormData[type][name] = value
+    const newFormData = { ...formData };
+    newFormData[type][name] = value;
 
-    setFormData(newFormData)
-  }
+    setFormData(newFormData);
+  };
 
   const handleProperties = () => {
-    var retrievedObject = JSON.parse(localStorage.getItem('newEntry'));
+    var retrievedObject = JSON.parse(localStorage.getItem("newEntry"));
 
     const desiredObj = {
       id: "#00008",
@@ -54,10 +76,9 @@ const AddPropertyPage = () => {
       area: retrievedObject.projectInformation.totalArea,
       occupied: retrievedObject.projectInformation.occupiedArea,
       status: "Approved",
-    }
+    };
 
-
-    let propertyList = JSON.parse(localStorage.getItem('propertiesList'));
+    let propertyList = JSON.parse(localStorage.getItem("propertiesList"));
 
     if (propertyList) {
       propertyList.unshift(desiredObj);
@@ -66,133 +87,187 @@ const AddPropertyPage = () => {
       propertyList.unshift(desiredObj);
     }
 
-    localStorage.setItem('propertiesList', JSON.stringify(propertyList));
+    localStorage.setItem("propertiesList", JSON.stringify(propertyList));
 
-    localStorage.removeItem('newEntry');
-    navigate('/')
-  }
+    localStorage.removeItem("newEntry");
+    navigate("/");
+  };
 
   const getValue = (type, name) => {
-    return formData[type][name]
-  }
+    return formData[type][name];
+  };
 
   const handleNextForm = () => {
     if (AddPropertyStepConstant.length - 1 > currentFormIndex) {
-      setCurrentFormIndex(currentFormIndex + 1)
-    }
-    else { // Last Page -> Save -> Network Request (Payload of all the forms)
+      setCurrentFormIndex(currentFormIndex + 1);
+    } else {
+      // Last Page -> Save -> Network Request (Payload of all the forms)
       // handleCreatePropertyApi()
     }
-  }
+  };
 
   const handlePrevForm = () => {
-    if (AddPropertyStepConstant.length - 1 >= currentFormIndex && currentFormIndex > 0) {
-      setCurrentFormIndex(currentFormIndex - 1)
+    if (
+      AddPropertyStepConstant.length - 1 >= currentFormIndex &&
+      currentFormIndex > 0
+    ) {
+      setCurrentFormIndex(currentFormIndex - 1);
     }
-  }
+  };
 
   const onSaveClick = async (e) => {
     e.preventDefault();
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 1:
         if (projectId) {
-          await updateOneProject({
-            data: { Name: formData.projectInformation.name }
-          }, projectId);
+          await updateOneProject(
+            {
+               titlw: formData.projectInformation.name ,
+            },
+            projectId
+          );
         } else {
-          const infoProject = await sendProjectInfo({
-            data: { Name: formData.projectInformation.name }
+          const data = {
+            title: formData.projectInformation.name,
+            plot_no: formData.projectInformation.plotNumber,
+            no_of_floor: parseInt(formData.projectInformation.totalFloors),
+            toatal_basement: parseInt(
+              formData.projectInformation.totalBasements
+            ),
+            toatal_area: formData.projectInformation.totalArea,
+            vacant_area: formData.projectInformation.vacantArea,
+            per_floor_area: formData.projectInformation.perFloorSize,
+            type: formData.projectInformation.buildingType,
+            power_backup:
+              formData.projectInformation.powerBackup == "Yes" ? true : false,
+            air_conditioned:
+              formData.projectInformation.airConditioned == "Yes"
+                ? true
+                : false,
+            state: formData.projectInformation.state,
+            city: formData.projectInformation.city,
+            zone: formData.projectInformation.zone,
+            location: formData.projectInformation.location,
+            status: "pending",
+          };
+          await sendProjectInfo(data).then((infoProject) => {
+            setProjectId(infoProject?.data?.id);
           });
-          setProjectId(infoProject.data.data.id);
+          // setProjectId(infoProject.data.id);
         }
         break;
       case 2:
         if (floorId) {
-          await updateOneFloor({
-            data: {
-              floorArea: Number(formData.floorInformation["floorArea"]),
-              floorNumber: Number(formData.floorInformation["floorNumber"]),
-              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
-              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
-              project: {
-                connect: [{ id: projectId }],
-              },
-            }
-          }, floorId)
+          const sendData = new FormData();
+          sendData.append(
+            "floor_area",
+            Number(formData.floorInformation["floorArea"])
+          );
+          sendData.append(
+            "floor_no",
+            Number(formData.floorInformation["floorNumber"])
+          );
+          sendData.append(
+            "unit_available",
+            Number(formData.floorInformation["unitsAvailable"])
+          );
+          sendData.append(
+            "total_unit",
+            Number(formData.floorInformation["totalUnits"])
+          );
+          sendData.append("property", projectId);
+          sendData.append(
+            "floor_plan",
+            formData.floorInformation["FloorImage"]
+          );
+          await updateOneFloor(
+            sendData,
+            floorId
+          );
         } else {
-          const infoFloor = await sendFloorInfo({
-            data: {
-              floorArea: Number(formData.floorInformation["floorArea"]),
-              floorNumber: Number(formData.floorInformation["floorNumber"]),
-              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
-              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
-              project: {
-                connect: [{ id: projectId }],
-              },
-            }
-          })
-          setFloorId(infoFloor.data.data.id);
+          const sendData = new FormData();
+          sendData.append(
+            "floor_area",
+            Number(formData.floorInformation["floorArea"])
+          );
+          sendData.append(
+            "floor_no",
+            Number(formData.floorInformation["floorNumber"])
+          );
+          sendData.append(
+            "unit_available",
+            Number(formData.floorInformation["unitsAvailable"])
+          );
+          sendData.append(
+            "total_unit",
+            Number(formData.floorInformation["totalUnits"])
+          );
+          sendData.append("property", projectId);
+          sendData.append(
+            "floor_plan",
+            formData.floorInformation["FloorImage"]
+          );
+
+          const infoFloor = await sendFloorInfo(sendData);
+          setFloorId(infoFloor?.data?.id);
         }
         break;
       case 3:
         if (unitId) {
-          await updateOneUnit({
-            data: {
-              askingRental: Number(formData.unitInformation["askingRental"]),
-              availabilityFor: formData.unitInformation["availabilityFor"],
-              furnishingStatus: formData.unitInformation["furnishingStatus"],
-              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
-              unitArea: Number(formData.unitInformation["unitArea"]),
-              unitNumber: Number(formData.unitInformation["unitNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          }, unitId)
+          await updateOneUnit(
+            {
+              price: Number(formData.unitInformation["askingRental"]),
+              available_for: formData.unitInformation["availabilityFor"],
+              furnishng_status: formData.unitInformation["furnishingStatus"],
+              no_of_parking: Number(formData.unitInformation["noOfParkings"]),
+              area: Number(formData.unitInformation["unitArea"]),
+              unit_no: Number(formData.unitInformation["unitNumber"]),
+              age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
+              property: projectId,
+            },
+            
+            unitId
+          );
         } else {
           const infoUnit = await sendUnitInfo({
-            data: {
-              askingRental: Number(formData.unitInformation["askingRental"]),
-              availabilityFor: formData.unitInformation["availabilityFor"],
-              furnishingStatus: formData.unitInformation["furnishingStatus"],
-              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
-              unitArea: Number(formData.unitInformation["unitArea"]),
-              unitNumber: Number(formData.unitInformation["unitNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          })
-          setUnitId(infoUnit.data.data.id);
+            price: Number(formData.unitInformation["askingRental"]),
+            available_for: formData.unitInformation["availabilityFor"],
+            furnishng_status: formData.unitInformation["furnishingStatus"],
+            no_of_parking: Number(formData.unitInformation["noOfParkings"]),
+            area: Number(formData.unitInformation["unitArea"]),
+            unit_no: Number(formData.unitInformation["unitNumber"]),
+            age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
+            property: projectId,
+          });
+          setUnitId(infoUnit?.data?.id);
         }
         break;
       case 4:
         if (personId) {
           console.log(formData.ownerInformation);
-          await updateOnePerson({
-            data: {
+          await updateOnePerson(
+            {
               email: formData.ownerInformation["email"],
               name: formData.ownerInformation["name"],
               phone: Number(formData.ownerInformation["mobileNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          }, personId)
+              property: projectId,
+              cam_charges: formData.ownerInformation["cmCharges"],
+              vacating_area: formData.ownerInformation["vacantArea"],
+            },
+            personId
+          );
         } else {
           const infoPerson = await sendPersonInfo({
-            data: {
-              email: formData.ownerInformation["email"],
-              name: formData.ownerInformation["name"],
-              phone: Number(formData.ownerInformation["mobileNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          })
-          setPersonId(infoPerson.data.data.id);
+            email: formData.ownerInformation["email"],
+            name: formData.ownerInformation["name"],
+            phone: Number(formData.ownerInformation["mobileNumber"]),
+            property: projectId,
+            cam_charges: formData.ownerInformation["cmCharges"],
+            vacating_area: formData.ownerInformation["vacantArea"],
+          });
+          setPersonId(infoPerson?.data?.id);
         }
-        navigate('/property');
+        navigate("/properties");
         setCurrentFormIndex(0);
         setFloorId(null);
         setPersonId(null);
@@ -203,100 +278,124 @@ const AddPropertyPage = () => {
       default:
         console.log(formData);
     }
-    handleNextForm()
-  }
+    handleNextForm();
+  };
 
   const onSaveDraft = async (e) => {
     e.preventDefault();
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 1:
         if (projectId) {
-          await updateOneProject({
-            data: { Name: formData.projectInformation.name }
-          }, projectId);
+          await updateOneProject(
+            {
+              data: { Name: formData.projectInformation.name },
+            },
+            projectId
+          );
         } else {
           const infoProject = await sendProjectInfo({
-            data: { Name: formData.projectInformation.name }
+            data: { Name: formData.projectInformation.name },
           });
           setProjectId(infoProject.data.data.id);
         }
-        navigate('/property');
+        navigate("/property");
         break;
       case 2:
         if (floorId) {
-          await updateOneFloor({
-            data: {
-              floorArea: Number(formData.floorInformation["floorArea"]),
-              floorNumber: Number(formData.floorInformation["floorNumber"]),
-              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
-              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
-              project: {
-                connect: [{ id: projectId }],
+          await updateOneFloor(
+            {
+              data: {
+                floorArea: Number(formData.floorInformation["floorArea"]),
+                floorNumber: Number(formData.floorInformation["floorNumber"]),
+                numberAvailableUnits: Number(
+                  formData.floorInformation["unitsAvailable"]
+                ),
+                totalUnitsInFloor: Number(
+                  formData.floorInformation["totalUnits"]
+                ),
+                project: {
+                  connect: [{ id: projectId }],
+                },
               },
-            }
-          }, floorId)
+            },
+            floorId
+          );
         } else {
           const infoFloor = await sendFloorInfo({
             data: {
               floorArea: Number(formData.floorInformation["floorArea"]),
               floorNumber: Number(formData.floorInformation["floorNumber"]),
-              numberAvailableUnits: Number(formData.floorInformation["unitsAvailable"]),
-              totalUnitsInFloor: Number(formData.floorInformation["totalUnits"]),
+              numberAvailableUnits: Number(
+                formData.floorInformation["unitsAvailable"]
+              ),
+              totalUnitsInFloor: Number(
+                formData.floorInformation["totalUnits"]
+              ),
               project: {
                 connect: [{ id: projectId }],
               },
-            }
-          })
+            },
+          });
           setFloorId(infoFloor.data.data.id);
         }
-        navigate('/property');
+        navigate("/property");
         break;
       case 3:
         if (unitId) {
-          await updateOneUnit({
-            data: {
-              askingRental: Number(formData.unitInformation["askingRental"]),
-              availabilityFor: formData.unitInformation["availabilityFor"],
-              furnishingStatus: formData.unitInformation["furnishingStatus"],
-              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
-              unitArea: Number(formData.unitInformation["unitArea"]),
-              unitNumber: Number(formData.unitInformation["unitNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          }, unitId)
+          await updateOneUnit(
+            {
+              data: {
+                askingRental: Number(formData.unitInformation["askingRental"]),
+                availabilityFor: formData.unitInformation["availabilityFor"],
+                furnishingStatus: formData.unitInformation["furnishingStatus"],
+                numberOfParkings: Number(
+                  formData.unitInformation["noOfParkings"]
+                ),
+                unitArea: Number(formData.unitInformation["unitArea"]),
+                unitNumber: Number(formData.unitInformation["unitNumber"]),
+                project: {
+                  connect: [{ id: projectId }],
+                },
+              },
+            },
+            unitId
+          );
         } else {
           const infoUnit = await sendUnitInfo({
             data: {
               askingRental: Number(formData.unitInformation["askingRental"]),
               availabilityFor: formData.unitInformation["availabilityFor"],
               furnishingStatus: formData.unitInformation["furnishingStatus"],
-              numberOfParkings: Number(formData.unitInformation["noOfParkings"]),
+              numberOfParkings: Number(
+                formData.unitInformation["noOfParkings"]
+              ),
               unitArea: Number(formData.unitInformation["unitArea"]),
               unitNumber: Number(formData.unitInformation["unitNumber"]),
               project: {
                 connect: [{ id: projectId }],
-              }
-            }
-          })
+              },
+            },
+          });
           setUnitId(infoUnit.data.data.id);
         }
-        navigate('/property');
+        navigate("/property");
         break;
       case 4:
         console.log(formData);
         if (personId) {
-          await updateOnePerson({
-            data: {
-              email: formData.ownerInformation["email"],
-              name: formData.ownerInformation["name"],
-              phone: Number(formData.ownerInformation["mobileNumber"]),
-              project: {
-                connect: [{ id: projectId }],
-              }
-            }
-          }, personId)
+          await updateOnePerson(
+            {
+              data: {
+                email: formData.ownerInformation["email"],
+                name: formData.ownerInformation["name"],
+                phone: Number(formData.ownerInformation["mobileNumber"]),
+                project: {
+                  connect: [{ id: projectId }],
+                },
+              },
+            },
+            personId
+          );
         } else {
           const infoPerson = await sendPersonInfo({
             data: {
@@ -305,49 +404,62 @@ const AddPropertyPage = () => {
               phone: Number(formData.ownerInformation["mobileNumber"]),
               project: {
                 connect: [{ id: projectId }],
-              }
-            }
-          })
+              },
+            },
+          });
           setPersonId(infoPerson.data.data.id);
         }
-        navigate('/property');
+        navigate("/property");
         break;
       default:
         console.log(formData);
     }
-  }
-
+  };
 
   const showFormBasedOnId = () => {
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 1:
-        return <ProjectInformation getValue={getValue} updateInputValue={updateInputValue} />
+        return (
+          <ProjectInformation
+            getValue={getValue}
+            updateInputValue={updateInputValue}
+          />
+        );
         break;
       case 2:
         return (
           <>
-            <FloorInformationForm getValue={getValue} updateInputValue={updateInputValue} />
+            <FloorInformationForm
+              getValue={getValue}
+              updateInputValue={updateInputValue}
+            />
           </>
-        )
+        );
         break;
       case 3:
         return (
           <>
-            <UnitInformationForm getValue={getValue} updateInputValue={updateInputValue} />
+            <UnitInformationForm
+              getValue={getValue}
+              updateInputValue={updateInputValue}
+            />
           </>
-        )
+        );
         break;
       case 4:
         return (
           <>
-            <OwnerInformation getValue={getValue} updateInputValue={updateInputValue} />
+            <OwnerInformation
+              getValue={getValue}
+              updateInputValue={updateInputValue}
+            />
           </>
-        )
+        );
         break;
       default:
         break;
     }
-  }
+  };
 
   const showProjectInfoOnTop = () => {
     switch (AddPropertyStepConstant[currentFormIndex].id) {
@@ -356,37 +468,36 @@ const AddPropertyPage = () => {
           <>
             <PropertyInfoDisplay />
           </>
-        )
+        );
         break;
       case 3:
         return (
           <>
             <PropertyInfoDisplay />
           </>
-        )
+        );
         break;
       case 4:
         return (
           <>
             <PropertyInfoDisplay />
           </>
-        )
+        );
         break;
       default:
-        <PropertyInfoDisplay />
+        <PropertyInfoDisplay />;
         break;
     }
-  }
+  };
 
   return (
     <>
-      <div className='flex justify-center gap-8 mt-4'>
+      <div className="flex justify-center gap-8 mt-4">
         <div className="border-b border-gray-200 bg-[white] pr-4 py-5 w-[250px] shadow-md rounded-md h-[100%]">
           <AddPropertySteps currentFormIndex={currentFormIndex} />
         </div>
 
-        <div className='w-[50%]'>
-
+        <div className="w-[50%]">
           {showProjectInfoOnTop()}
           <div className="border-b border-gray-200 bg-[white] px-4 py-5 sm:px-6 shadow-md rounded-md ">
             <form>
@@ -414,16 +525,21 @@ const AddPropertyPage = () => {
                   >
                     Save
                   </button>
-                  <AppPopup title='Property Added' showPopup={popup} setShowPopup={setPopup} buttonTitle='Go To Property List' onButtonClick={handleProperties} />
+                  <AppPopup
+                    title="Property Added"
+                    showPopup={popup}
+                    setShowPopup={setPopup}
+                    buttonTitle="Go To Property List"
+                    onButtonClick={handleProperties}
+                  />
                 </div>
               </div>
             </form>
-
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AddPropertyPage
+export default AddPropertyPage;

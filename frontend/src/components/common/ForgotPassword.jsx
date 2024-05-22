@@ -13,7 +13,6 @@ const ForgotPassword = () => {
         email: email
       });
   
-      console.log("User registered successfully!", res.data);
     }
     } catch (error) {
       console.error("Error registering:", error);

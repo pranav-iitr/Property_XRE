@@ -12,7 +12,7 @@ const FloorInformationForm = (props) => {
   useEffect(() => {
     const unMount = async () => {
       const res = await getOneFloor(floorId);
-      console.log(res);
+   
       updateInputValue(res.data.data.attributes.floorNumber, null, "floorInformation", 'floorNumber');
       updateInputValue(res.data.data.attributes.floorArea, null, "floorInformation", 'floorArea');
       updateInputValue(res.data.data.attributes.totalUnitsInFloor, null, "floorInformation", 'totalUnits');
@@ -99,7 +99,7 @@ const FloorInformationForm = (props) => {
                       onChange={(e) => {
                         const file = e.target.files[0];
                         const url = URL.createObjectURL(file);
-                        updateInputValue(url, e, type);
+                        updateInputValue(file, e, type);
                       }}
                     />
                   </label>

@@ -2,16 +2,18 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 const MenusConstant = [
   { id: 1, title: "Dashboard", href: "/dashboard" },
-  { id: 2, title: "Properties", href: "/property" },
+  { id: 2, title: "Properties", href: "/properties" },
   { id: 3, title: "People", href: "/people" },
   { id: 4, title: "Proposals", href: "/proposals" },
   { id: 5, title: "Reporting & Analytics", href: "/reporting" },
 ];
 
 export default function AppHeader() {
+  const location = useLocation();
+  console.log( "location =>", location);
   return (
     <Disclosure as="nav" className="bg-white shadow border">
       {({ open }) => (
@@ -30,15 +32,16 @@ export default function AppHeader() {
                   />
                 </div>
 
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <div className={`hidden sm:ml-6 sm:flex sm:space-x-8`}>
                   {MenusConstant.map((item) => {
-                    const noActiveClass =
-                      "inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700";
-                    return (
+                    
+                      // "inline-flex bg-red-500 items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700";
+                      console.log(item?.title, location.pathname,  `/${item?.title.toLowerCase()}` , location.pathname == item.href );
+                      return (
                       <Link
                         key={item.id}
                         to={item.href}
-                        className={noActiveClass}
+                        className={`inline-flex   ${location.pathname == item.href ? "border-primary border-b-4 " : "border-b-2 border-transparent"  }  items-center  px-1 pt-1 text-sm font-medium text-gray-500  hover:text-gray-700`}
                       >
                         {item.title}
                       </Link>

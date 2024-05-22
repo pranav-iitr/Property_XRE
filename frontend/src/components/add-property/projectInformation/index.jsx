@@ -13,9 +13,10 @@ export default function ProjectInformation(props) {
   const propertyImage = getValue(type, "propertyImage")
   useEffect(() => {
     const unMount = async () => {
-      const res = await getOneProject(projectId);
-      console.log(res);
+      await getOneProject(projectId).then((res) => {
+   
       updateInputValue(res.data.data.attributes.Name, null, "projectInformation", 'name')
+    });
     }
     if (projectId) {
       unMount();
@@ -168,7 +169,7 @@ export default function ProjectInformation(props) {
             <CustomDropdown
               title="States"
               name="state"
-              options={[{ title: "Haryana", value: "gujarat" }]}
+              options={[{ title: "Gujarat", value: "Gujarat" }]}
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
