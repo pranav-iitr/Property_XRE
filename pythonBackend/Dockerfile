@@ -11,7 +11,7 @@ ENV PYTHONBUFFERED 1
 # RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev
 
 RUN apk update \
-  && apt-get install build-essential libffi-dev libssl-dev zlib1g-dev
+  && apk add build-essential libffi-dev libssl-dev zlib1g-dev
 
 RUN pip install --upgrade pip \
   && pip install --upgrade setuptools \
