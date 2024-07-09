@@ -12,7 +12,9 @@ services:
     volumes:
             - ./pythonBackend:/xre/backend
     expose:
-      - 9000
+      - 8000
+    ports:
+      - "8000:8000"
   
   esummit22-frontend:
     build:
@@ -22,6 +24,8 @@ services:
 
     expose:
       - 3000
+    ports:
+      - "3000:3000"
 volumes:
   # static-ui-content:
   static-ui-content:
