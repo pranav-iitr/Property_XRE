@@ -47,7 +47,7 @@ const FiltersBar = ({
             classNames={{
               container: () => " w-full !z-10 !border-none self-stretch rounded-lg  ",
               indicatorSeparator: () => "hidden",
-              control: () => "border-none",
+              control: () => "!border-none",
               menuList: () => "!w-36 !z-10",
               menu: () => "!w-36 !z-50",
               menuPortal: () => "!w-36 !z-10",
@@ -75,9 +75,12 @@ const FiltersBar = ({
               setfilterCity(e.value);
             }}
             classNames={{
-              container: () => " w-full !border-none self-stretch rounded-lg  ",
+              container: () => " w-full !z-10 !border-none self-stretch rounded-lg  ",
               indicatorSeparator: () => "hidden",
-              control: () => "border-none",
+              control: () => "!border-none",
+              menuList: () => "!w-36 !z-10",
+              menu: () => "!w-36 !z-50",
+              menuPortal: () => "!w-36 !z-10",
             }}
           />
         </div>
@@ -86,9 +89,12 @@ const FiltersBar = ({
             options={zones}
             placeholder="zone"
             classNames={{
-              container: () => " w-full !border-none self-stretch rounded-lg  ",
+              container: () => " w-full !z-10 !border-none self-stretch rounded-lg  ",
               indicatorSeparator: () => "hidden",
-              control: () => "border-none",
+              control: () => "!border-none",
+              menuList: () => "!w-36 !z-10",
+              menu: () => "!w-36 !z-50",
+              menuPortal: () => "!w-36 !z-10",
             }}
             onChange={(e) => {
               setfilterZone(e.value);
@@ -100,7 +106,10 @@ const FiltersBar = ({
   );
 };
 
-const SearchInput = () => {
+const SearchInput = ({
+  setfilterLocation,
+  filterLocation,
+}) => {
   return (
     <div className="w-full sm:max-w-md">
       <div className="relative rounded-md shadow-sm">
@@ -119,10 +128,16 @@ const SearchInput = () => {
         </div>
         <input
           type="text"
-          name="phone-number"
-          id="phone-number"
+          name="location"
+          id="location"
           className="block w-full rounded-md border-0 py-1.5 pl-28 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Search location"
+          value={filterLocation}
+          onChange={(e) => {
+            setfilterLocation(e.target.value);
+            console.log(e.target.value);
+
+          }}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           <MagnifyingGlassIcon
@@ -142,6 +157,8 @@ export default function PropertyHeader({
   setfilterCity,
   setfilterZone,
   setfilterType,
+  setfilterLocation,
+  filterLocation,
 }) {
   const navigate = useNavigate();
 
@@ -159,7 +176,10 @@ export default function PropertyHeader({
                 </div>
               </div>
               <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
-                <SearchInput />
+                <SearchInput 
+                setfilterLocation={setfilterLocation}
+                filterLocation={filterLocation}
+                />
               </div>
               <div className="relative z-10 flex items-center lg:hidden">
                 {/* Mobile menu button */}

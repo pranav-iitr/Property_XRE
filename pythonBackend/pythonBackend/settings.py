@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework',
     'properties',
-    # 'User',
+    'User',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +75,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pythonBackend.wsgi.application'
 
 
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
+STATIC_URL = "/static/"
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media_files/'
+
+AUTH_USER_MODEL = 'User.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -118,6 +124,29 @@ USE_I18N = True
 
 USE_TZ = True
 
+SIMPLE_JWT = {
+
+        'ROTATE_REFRESH_TOKENS': True,
+        'BLACKLIST_AFTER_ROTATION': True,
+}
+
+    # Set the refresh token cookie name and options
+SIMPLE_JWT['REFRESH_TOKEN_COOKIE_NAME'] = 'refresh_token'
+SIMPLE_JWT['REFRESH_TOKEN_COOKIE_SAMESITE'] = None
+
+## CHANGE THIS TO TRUE IN PRODUCTION
+SIMPLE_JWT['REFRESH_TOKEN_COOKIE_SECURE'] = False
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
+]
+
+    }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

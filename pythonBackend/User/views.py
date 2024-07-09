@@ -6,7 +6,7 @@ from .models import User
 from django.contrib.auth import authenticate
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated,AllowAny
-from .serializers import UserSerializer, UserSignupSerializer, UserLoginSerializer,UserAnalyticsSerializer
+from .serializers import UserSerializer, UserSignupSerializer, UserLoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from datetime import datetime
 from datetime import datetime, timedelta
@@ -31,9 +31,9 @@ class UserViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': 'Invalid credentials',"data":serializer.errors}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         user = None
-        if 'phone_no' in data:
+        if 'email' in data:
             print(serializer.validated_data)
-            user = authenticate(phone_no=serializer.validated_data['phone_no'], password=serializer.validated_data['password'])
+            user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
         if user:
           
             refresh = RefreshToken.for_user(user)

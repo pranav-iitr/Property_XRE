@@ -1,10 +1,19 @@
 import { ArrowUpIcon } from "@heroicons/react/20/solid";
+import { useState, useEffect } from "react";
 
-
-
-export default function PropertyListing({ projects }) {
-  
-
+export default function PropertyListing({ projects, setSort_by }) {
+  const [id, setId] = useState(true);
+  const [type, setType] = useState(false);
+  const [title, setTitle] = useState(false);
+  useEffect(() => {
+    setSort_by(id ? "id" : "-id");
+  }, [id]);
+  useEffect(() => {
+    setSort_by(type ? "type" : "-type");
+  }, [type]);
+  useEffect(() => {
+    setSort_by(title ? "title" : "-title");
+  }, [title]);
   return (
     <div className="px-4 sm:px-6 lg:px-8 lg:mb-6">
       <div className="mt-2 flow-root">
@@ -18,27 +27,60 @@ export default function PropertyListing({ projects }) {
                       scope="col"
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-medium text-gray-500 sm:pl-6"
                     >
-                      <div className="flex gap-2 items-center">
+                      <div
+                        onClick={() => {
+                          setId(!id);
+                          setTitle(false);
+                          setType(false);
+                        }}
+                        className="flex gap-2 items-center"
+                      >
                         <p>ID’s</p>
-                        <ArrowUpIcon className="w-5 h-" />
+                        <ArrowUpIcon
+                          className={`w-5 h-5 ${
+                            id ? "rotate-0" : "rotate-180"
+                          } `}
+                        />
                       </div>
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-sm font-medium text-gray-500 flex justify-center"
                     >
-                      <div className="flex gap-2 items-center">
+                      <div
+                        onClick={() => {
+                          setType(!type);
+                          setId(false);
+                          setTitle(false);
+                        }}
+                        className="flex gap-2 items-center"
+                      >
                         <p>TYPE</p>
-                        <ArrowUpIcon className="w-5 h-5" />
+                        <ArrowUpIcon
+                          className={`w-5 h-5 ${
+                            type ? "rotate-0" : "rotate-180"
+                          } `}
+                        />
                       </div>
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-medium text-gray-500"
                     >
-                      <div className="flex gap-2">
+                      <div
+                        onClick={() => {
+                          setTitle(!title);
+                          setId(false);
+                          setType(false);
+                        }}
+                        className="flex gap-2"
+                      >
                         <p>PROPERTY NAME</p>
-                        <ArrowUpIcon className="w-5 h-5" />
+                        <ArrowUpIcon
+                          className={`w-5 h-5 ${
+                            title ? "rotate-0" : "rotate-180"
+                          } `}
+                        />
                       </div>
                     </th>
                     <th

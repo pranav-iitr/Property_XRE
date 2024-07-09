@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+
+  backend:
+    build:
+      context: ./pythonBackend
+      dockerfile: Dockerfile
+    working_dir: /xre/backend
+    
+
+    volumes:
+            - ./pythonBackend:/xre/backend
+    expose:
+      - 9000
+  
+  esummit22-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    working_dir: /xre/frontend
+
+    expose:
+      - 3000
+volumes:
+  # static-ui-content:
+  static-ui-content:

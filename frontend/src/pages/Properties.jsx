@@ -14,11 +14,14 @@ const Properties = () => {
   const [filterZone, setfilterZone] = useState("");
   const [filterCity, setfilterCity] = useState("");
   const [filterType, setfilterType] = useState("");
+  const [filterLocation, setfilterLocation] = useState("");
+  const [sort_by, setSort_by] = useState("id");
   const [filter, setFilter] = useState("");
   const reset = () => {
     setfilterCity("");
     setfilterZone("");
     setfilterType("");
+    setfilterLocation(null);
   };
   const Mount = async (page = 1, filters = "") => {
     await getAllProjects(page, filters).then((response) => {
@@ -64,9 +67,13 @@ const Properties = () => {
     if (filterType) {
       filters += `&type=${filterType}`;
     }
+    if (filterLocation) {
+      filters += `&location=${filterLocation}`;
+    }
+    filters += `&sort_by=${sort_by}`;
     setFilter(filters);
     Mount(1, filters);
-  }, [filterZone, filterCity, filterType]);
+  }, [filterZone, filterCity, filterType,filterLocation,sort_by]);
   return (
     <div>
       <PropertyHeader
@@ -76,9 +83,11 @@ const Properties = () => {
         setfilterCity={setfilterCity}
         setfilterZone={setfilterZone}
         setfilterType={setfilterType}
+        setfilterLocation={setfilterLocation}
+        filterLocation={filterLocation}
       />
       <AppliedFiltersBar reset={reset} />
-      <PropertyListing projects={projects} />
+      <PropertyListing projects={projects} setSort_by={setSort_by}  />
       <PropertiesPagination meta={meta} Mount={Mount} />
     </div>
   );

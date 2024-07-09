@@ -24,11 +24,11 @@ const LoginPage = () => {
     console.log(registerData);
     try {
       const res = await loginAction({
-        identifier: registerData.email,
+        email: registerData.email,
         password: registerData.password,
       });
-      localStorage.setItem('token', res.data.jwt);
-      navigate("/property");
+      localStorage.setItem('token', res.data.access_token);
+      navigate("/properties");
     } catch (error) {
       console.error("Error registering:", error);
     }

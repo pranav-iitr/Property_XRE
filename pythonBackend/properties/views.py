@@ -38,7 +38,6 @@ class PropertiesListView(APIView):
         start_index = paginator.page.start_index()
         end_index = paginator.page.end_index()
         current_page = paginator.page.number
-
         response = paginator.get_paginated_response(serializer.data)
         response.data['total_pages'] = total_pages
         response.data['current_page'] = paginator.page.number

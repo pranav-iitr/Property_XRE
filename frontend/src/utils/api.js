@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const loginAction = async (data) => {
   const response = await axios.post(
-    `${import.meta.env.VITE_STRAPI_URL}/auth/local`,
+    `${import.meta.env.VITE_STRAPI_URL}/users/login/`,
     data
   );
   return response;
