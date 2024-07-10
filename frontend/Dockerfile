@@ -18,7 +18,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-EXPOSE 5137
+EXPOSE 5173
 
 # Start Vite development server
 CMD ["npm", "run", "dev"]
