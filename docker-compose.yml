@@ -16,16 +16,19 @@ services:
     ports:
       - "8000:8000"
   
-  esummit22-frontend:
+  frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     working_dir: /xre/frontend
 
+    env_file:
+      - ./frontend/.env
+
     expose:
-      - 3000
+      - 5173
     ports:
-      - "3000:3000"
+      - "5173:5173"
 volumes:
   # static-ui-content:
   static-ui-content:

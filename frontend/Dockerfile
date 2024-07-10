@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose port 3000
-EXPOSE 3000
+EXPOSE 5173
 
 # Start Vite development server
 CMD ["npm", "run", "dev"]
