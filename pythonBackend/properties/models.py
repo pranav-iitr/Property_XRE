@@ -47,7 +47,7 @@ class Floor(models.Model):
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.floor_no
+        return f"{self.floor_no}"
 
 class Unit(models.Model):
     unit_no = models.IntegerField()
@@ -62,7 +62,7 @@ class Unit(models.Model):
     
 
     def __str__(self):
-        return self.unit_no
+        return f"{self.unit_no}"
 class Owner(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
