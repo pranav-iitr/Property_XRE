@@ -13,8 +13,12 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+
+
 # Build the application
 RUN npm run build
+
+EXPOSE 5137
 
 # Start Vite development server
 CMD ["npm", "run", "dev"]
