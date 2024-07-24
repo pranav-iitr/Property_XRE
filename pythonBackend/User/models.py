@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 
-
+from random import randint
 from django.utils.translation import gettext_lazy as _
 from User.manager import UserManager
 
@@ -14,6 +14,7 @@ class User(AbstractUser):
     phone_no = models.CharField(max_length=10, blank=True,unique=True)
     email = models.EmailField(_('email'), max_length=80, unique=True)
     rating = models.PositiveIntegerField(default=800)
+    otp = models.CharField(max_length=6, blank=True)
     username = None
     # Field for login
     USERNAME_FIELD = 'email'
@@ -26,6 +27,12 @@ class User(AbstractUser):
     objects = UserManager()
     def __str__(self):
         return f"{self.email}"
+    
+    def set_otp(self):
+        self.otp = randint(100000, 999999)
+        self.save()
+        return self.otp
+
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")

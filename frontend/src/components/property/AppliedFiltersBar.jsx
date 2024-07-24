@@ -1,8 +1,7 @@
-// import { XMarkIcon } from "@heroicons/react/24/outline";
 
-const AppliedFiltersBar = ({reset}) => {
+const AppliedFiltersBar = ({reset,project,setProjFilter}) => {
   return (
-    <div className="lg:px-8 lg:py-4 flex justify-between">
+    <div className="px-8 py-4 flex justify-between">
 
       <div className="flex gap-3 items-center">
         <p className=" text-sm font-medium text-gray-500">Applied Filters</p>
@@ -13,8 +12,8 @@ const AppliedFiltersBar = ({reset}) => {
             className="inline-flex  items-center gap-x-1.5 rounded-3xl bg-red-100 px-3 py-1 text-sm font-semibold text-red-800"
             
           >
-            Projects
-            {/* <XMarkIcon className="-mr-0.5 h-5 w-5" aria-hidden="true" /> */}
+            {project.label}
+           
           </div>
         </div>
       </div>

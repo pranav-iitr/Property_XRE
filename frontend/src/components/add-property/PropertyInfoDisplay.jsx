@@ -1,5 +1,7 @@
-
+import { useAtom } from "jotai/react";
+import { photoAtom } from "../../store/photo";
 const PropertyInfoDisplay = () => {
+  const [photo] = useAtom(photoAtom);
 
   const newPropertyInfo = JSON.parse(localStorage.getItem('newEntry'));
 
@@ -7,7 +9,7 @@ const PropertyInfoDisplay = () => {
     <div className='p-6 mb-4 flex justify-between items-center md:shadow-xl rounded-md'>
       <div className='flex gap-4'>
         <div>
-          <img src={newPropertyInfo?.projectInformation?.propertyImage} className='w-[100px] h-[80px]' alt='property'></img>
+          <img src={photo?.propertyImage} className='w-[100px] h-[80px]' alt='property'/>
         </div>
         <div className='flex flex-col gap-2'>
           <div>

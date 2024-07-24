@@ -12,7 +12,7 @@ export default function OwnerInformation(props) {
   useEffect(() => {
     const unMount = async () => {
       const res = await getOnePerson(personId);
-      console.log(res);
+   
       updateInputValue(res.data.data.attributes.name, null, "ownerInformation", 'name')
       updateInputValue(res.data.data.attributes.email, null, "ownerInformation", 'email')
       updateInputValue(res.data.data.attributes.phone, null, "ownerInformation", 'mobileNumber')

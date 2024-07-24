@@ -59,4 +59,20 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
    
-    
+    @action(detail=False, methods=['post'], serializer_class=UserLoginSerializer)
+    def forgot_password(self, request):
+        data = request.data
+        print(data)
+        user = User.objects.filter(email=data['email']).first()
+        if user:
+            otp = user.set_otp()
+            return Response({'otp':otp})
+        return Response({'error':'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    def verify_otp(self, request):
+        data = request.data
+        user = User.objects.filter(email=data['email']).first()
+        if user:
+            if user.verify_otp(data['otp']):
+                return Response({'message':'OTP verified'})
+            return Response({'error':'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':'User not found'}, status=status.HTTP_404_NOT_FOUND)

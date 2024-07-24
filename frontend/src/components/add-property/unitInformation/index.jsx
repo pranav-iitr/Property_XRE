@@ -12,7 +12,7 @@ const UnitInformationForm = (props) => {
   useEffect(() => {
     const unMount = async () => {
       const res = await getOneUnit(unitId);
-      console.log(res);
+
       updateInputValue(res.data.data.attributes.unitArea, null, "unitInformation", 'unitArea')
       updateInputValue(res.data.data.attributes.unitNumber, null, "unitInformation", 'unitNumber')
       updateInputValue(res.data.data.attributes.numberOfParkings, null, "unitInformation", 'noOfParkings')

@@ -15,6 +15,31 @@ class PropertiesListSerializer(serializers.ModelSerializer):
     
     def get_occupied_area(self, obj):
         return obj.toatal_area - obj.vacant_area
+class unitListSerializer(serializers.ModelSerializer):
+
+    title = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
+    toatal_area = serializers.SerializerMethodField()
+    occupied_area = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Unit
+        fields = ("id","title","location","toatal_area","occupied_area","status","type")
+    def get_title(self, obj):
+        return obj.property.title
+    def get_location(self, obj):
+        return obj.property.location
+    def get_toatal_area(self, obj):
+        return obj.area
+    def get_occupied_area(self, obj):
+        return 0
+    def get_status(self, obj):
+        return obj.property.status
+    def get_type(self, obj):
+        return obj.property.type
+        
 class PropertiesCreateUpdateSerilizer(serializers.Serializer):
     title = serializers.CharField()
     type = serializers.CharField()
@@ -30,7 +55,7 @@ class PropertiesCreateUpdateSerilizer(serializers.Serializer):
     state = serializers.CharField()
     city = serializers.CharField()
     zone = serializers.CharField()
-    # photo = serializers.ImageField()
+    photo = serializers.ImageField()
     location = serializers.CharField()
     status = serializers.CharField()
 
@@ -53,3 +78,8 @@ class OwnerSerializer(serializers.ModelSerializer):
         model = Owner
         fields = "__all__"
 
+class unitDisplaySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Unit
+        fields = "__all__"

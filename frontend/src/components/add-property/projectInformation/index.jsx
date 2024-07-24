@@ -2,31 +2,53 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import AreaInputWithDropdown from "../../common/AreaInputWithDropdown";
 import CustomInput from "../../common/CustomInput";
 import CustomDropdown from "../../common/CustomDropdown";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMatchStore } from "../../../store/projectStore";
 import { getOneProject } from "../../../utils/api";
+
+import { GetState, GetCity } from "react-country-state-city";
+
+import { useAtom } from "jotai/react";
+import { photoAtom } from "../../../store/photo";
 
 export default function ProjectInformation(props) {
   const { projectId } = useMatchStore();
   const { updateInputValue, getValue } = props;
+  const [stateOptions, setStateOptions] = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
+  const [photo, setPhoto] = useAtom(photoAtom);
+  useEffect(() => {
+    GetState(101).then((res) => {
+      console.log(res);
+      setStateOptions(
+        res.map((state) => {
+          return { title: state.name, value: state.name, id: state.id };
+        })
+      );
+    });
+  }, []);
+
   const type = "projectInformation";
-  const propertyImage = getValue(type, "propertyImage")
+  const propertyImage = getValue(type, "propertyImage");
   useEffect(() => {
     const unMount = async () => {
       await getOneProject(projectId).then((res) => {
-   
-      updateInputValue(res.data.data.attributes.Name, null, "projectInformation", 'name')
-    });
-    }
+        updateInputValue(
+          res.data.data.attributes.Name,
+          null,
+          "projectInformation",
+          "name"
+        );
+      });
+    };
     if (projectId) {
       unMount();
     }
-  }, [])
+  }, []);
   return (
     <>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Project Information
           </h2>
@@ -133,6 +155,9 @@ export default function ProjectInformation(props) {
               options={[
                 { title: "Commercial", value: "Commercial" },
                 { title: "Residential", value: "Residential" },
+                { title: "Industrial", value: "Industrial" },
+                { title: "Agricultural", value: "Agricultural" },
+                { title: "Other", value: "Other" },
               ]}
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
@@ -169,9 +194,24 @@ export default function ProjectInformation(props) {
             <CustomDropdown
               title="States"
               name="state"
-              options={[{ title: "Gujarat", value: "Gujarat" }]}
+              options={stateOptions}
               inputProps={{
-                onChange: (e) => updateInputValue(e.target.value, e, type),
+                onChange: (e) => {
+                  updateInputValue(e.target.value, e, type);
+                  console.log(e.target.value, e);
+                  //get id from stateOptions
+                  const Id = stateOptions.find(
+                    (state) => state.value === e.target.value
+                  ).id;
+                  GetCity(101, Id).then((res) => {
+                    console.log(res, e);
+                    setCityOptions(
+                      res.map((city) => {
+                        return { title: city.name, value: city.name };
+                      })
+                    );
+                  });
+                },
               }}
               getValue={() => getValue(type, "state")}
             />
@@ -179,7 +219,7 @@ export default function ProjectInformation(props) {
             <CustomDropdown
               title="City"
               name="city"
-              options={[{ title: "Gurugram", value: "gurugram" }]}
+              options={cityOptions}
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
@@ -189,7 +229,19 @@ export default function ProjectInformation(props) {
             <CustomDropdown
               title="Zone"
               name="zone"
-              options={[{ title: "North", value: "north" }]}
+              options={[
+                {"title": "North", "value": "North"},
+                {"title": "South", "value": "South"},
+                {"title": "East", "value": "East"},
+                {"title": "West", "value": "West"},
+                {"title": "Central", "value": "Central"},
+                {"title": "North-East", "value": "North-East"},
+                {"title": "North-West", "value": "North-West"},
+                {"title": "South-East", "value": "South-East"},
+                {"title": "South-West", "value": "South-West"},
+                {"title": "Other", "value": "Other"}
+            ]
+            }
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
@@ -214,18 +266,24 @@ export default function ProjectInformation(props) {
                       htmlFor="file-upload"
                       className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
-                      <span onClick={() => document.getElementById('upload-file-input').click()}
-                        className="file-upload-btn">Upload a file</span>
+                      <span
+                        onClick={() =>
+                          document.getElementById("upload-file-input").click()
+                        }
+                        className="file-upload-btn"
+                      >
+                        Upload a file
+                      </span>
                       <input
                         id="upload-file-input"
                         name="propertyImage"
                         type="file"
-
                         className="sr-only"
                         onChange={(e) => {
                           const file = e.target.files[0];
                           const url = URL.createObjectURL(file);
-                          updateInputValue(url, e, type);
+                          setPhoto({ ...photo, propertyImage: url });
+                          updateInputValue(file, e, type);
                         }}
                       />
                     </label>
@@ -237,14 +295,17 @@ export default function ProjectInformation(props) {
                 </div>
               </div>
             </div>
-            {propertyImage
-              ?
+            {photo?.propertyImage ? (
               <div className="col-span-full justify-self-center">
-                <img src={propertyImage} alt='UploadedImage' className="w-40 h-40 " />
+                <img
+                  src={photo?.propertyImage}
+                  alt="UploadedImage"
+                  className="w-40 h-40 "
+                />
               </div>
-              :
+            ) : (
               " "
-            }
+            )}
 
             <div className="sm:col-span-6">
               <CustomInput

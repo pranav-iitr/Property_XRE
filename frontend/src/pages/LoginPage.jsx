@@ -1,15 +1,28 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { loginAction } from "../utils/api";
+import toast from "react-hot-toast";
+import { useAtom } from "jotai/react";
+import { authAtom } from "../store/auth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [auth, setAuth] = useAtom(authAtom);
+
+  useEffect(() => {
+    console.log(auth)
+    if(auth?.access_token){
+      navigate('/properties')
+    }
+  }, [auth])
+  
 
   const [registerData, setRegisterData] = useState({
     password: "",
     email: "",
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,17 +34,25 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(registerData);
-    try {
-      const res = await loginAction({
-        email: registerData.email,
-        password: registerData.password,
+
+
+    const res = await loginAction({
+      email: registerData.email,
+      password: registerData.password,
+    })
+      .then((res) => {
+        // localStorage.setItem('token', res.data.access_token);
+        setAuth(res.data);
+        navigate("/properties");
+      })
+      .catch((err) => {
+        toast.error(
+          err.response.data.message
+            ? err.response.data.message
+            : "Invalid email or password"
+        );
+        console.log(err);
       });
-      localStorage.setItem('token', res.data.access_token);
-      navigate("/properties");
-    } catch (error) {
-      console.error("Error registering:", error);
-    }
   };
 
   return (
@@ -99,21 +120,6 @@ const LoginPage = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <input
-                        id="remember-me"
-                        name="remember-me"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                      <label
-                        htmlFor="remember-me"
-                        className="ml-3 block text-sm leading-6 text-gray-700"
-                      >
-                        Remember me
-                      </label>
-                    </div>
-
                     <div className="text-sm leading-6">
                       <Link
                         to="/forgot-password"

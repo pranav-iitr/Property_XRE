@@ -16,12 +16,18 @@ const Properties = () => {
   const [filterType, setfilterType] = useState("");
   const [filterLocation, setfilterLocation] = useState("");
   const [sort_by, setSort_by] = useState("id");
+  const [value, setValue] = useState([0,10000]);
+  const [projFilter, setProjFilter] = useState({
+    label: "project",
+    value: "project",
+  })
   const [filter, setFilter] = useState("");
   const reset = () => {
     setfilterCity("");
     setfilterZone("");
     setfilterType("");
     setfilterLocation(null);
+    setValue([0,10000]);
   };
   const Mount = async (page = 1, filters = "") => {
     await getAllProjects(page, filters).then((response) => {
@@ -42,20 +48,20 @@ const Properties = () => {
 
       setTypes(
         response.data.types.map((type) => {
-          return { label: type.type, value: type.type };
+          return { label: type, value: type };
         })
       );
       setZones(
         response.data.zones.map((zone) => {
-          return { label: zone.zone, value: zone.zone };
+          return { label: zone, value: zone };
         })
       );
       setProjects(response.data.results);
     });
   };
-  useEffect(() => {
-    Mount();
-  }, []);
+  // useEffect(() => {
+  //   Mount();
+  // }, []);
   useEffect(() => {
     let filters = "";
     if (filterCity) {
@@ -70,24 +76,36 @@ const Properties = () => {
     if (filterLocation) {
       filters += `&location=${filterLocation}`;
     }
+    if (value) {
+      filters += `&min_price=${value[0]}&max_price=${value[1]}`;
+    }
+    if(projFilter){
+      filters += `&project=${projFilter.value}`;
+    }
     filters += `&sort_by=${sort_by}`;
     setFilter(filters);
     Mount(1, filters);
-  }, [filterZone, filterCity, filterType,filterLocation,sort_by]);
+  }, [filterZone, filterCity, filterType,filterLocation,sort_by,value,projFilter]);
   return (
     <div>
       <PropertyHeader
         cites={cites}
         types={types}
         zones={zones}
+        projFilter={projFilter}
+        value={value}
+        setValue={setValue}
+        setProjFilter={setProjFilter}
         setfilterCity={setfilterCity}
         setfilterZone={setfilterZone}
         setfilterType={setfilterType}
         setfilterLocation={setfilterLocation}
         filterLocation={filterLocation}
       />
-      <AppliedFiltersBar reset={reset} />
-      <PropertyListing projects={projects} setSort_by={setSort_by}  />
+      <AppliedFiltersBar reset={reset} project={projFilter} 
+      setProjFilter={setProjFilter}
+       />
+      <PropertyListing projects={projects} setSort_by={setSort_by}   />
       <PropertiesPagination meta={meta} Mount={Mount} />
     </div>
   );

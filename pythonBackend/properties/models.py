@@ -1,16 +1,10 @@
 from django.db import models
 # import user
 from django.contrib.auth.models import User
-
+from .constants import propertyConstants
 # Create your models here.
 
-type_choices = (
-    ('Commercial', 'Commercial'),
-    ('Residential', 'Residential'),
-    ('Industrial', 'Industrial'),
-    ('Agricultural', 'Agricultural'),
-    ('Other', 'Other'),
-)
+property_constants = propertyConstants()
 
 
 class Features(models.Model):
@@ -26,12 +20,12 @@ class Properties(models.Model):
     vacant_area = models.IntegerField(null=True,blank=True)
     features = models.ManyToManyField(Features,blank=True,null=True)
     per_floor_area = models.IntegerField(null=True,blank=True)
-    type = models.CharField(max_length=100,choices=type_choices)
+    type = models.CharField(max_length=100,choices=property_constants.type_choices)
     power_backup = models.BooleanField(default=False)
     air_conditioned = models.BooleanField(default=False)
     state = models.CharField(max_length=100,null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
-    zone = models.CharField(max_length=100,default='North')
+    zone = models.CharField(max_length=100,choices=property_constants.zone_choices)
     location = models.CharField(max_length=100,null=True,blank=True)
     photo = models.ImageField(upload_to='properties/',null=True,blank=True)
     status = models.CharField(max_length=100,default='Pending')
@@ -74,3 +68,4 @@ class Owner(models.Model):
 
     def __str__(self):
         return self.name
+# class Features

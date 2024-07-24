@@ -3,9 +3,11 @@ import CustomInput from "../../common/CustomInput";
 import { useMatchStore } from "../../../store/projectStore";
 import { getOneFloor } from "../../../utils/api";
 import { useEffect } from "react";
-
+import { useAtom } from "jotai/react";
+import { photoAtom } from "../../../store/photo";
 const FloorInformationForm = (props) => {
   const { floorId } = useMatchStore();
+  const [photo, setPhoto] = useAtom(photoAtom);
   const { updateInputValue, getValue } = props;
   const type = "floorInformation";
   const FloorImage = getValue(type, "FloorImage")
@@ -99,6 +101,7 @@ const FloorInformationForm = (props) => {
                       onChange={(e) => {
                         const file = e.target.files[0];
                         const url = URL.createObjectURL(file);
+                        setPhoto({ ...photo, FloorImage: url });
                         updateInputValue(file, e, type);
                       }}
                     />
@@ -111,10 +114,10 @@ const FloorInformationForm = (props) => {
               </div>
             </div>
           </div>
-          {FloorImage
+          {photo?.FloorImage
             ?
             <div className="col-span-full justify-self-center">
-              <img src={FloorImage} alt='UploadedImage' className="w-40 h-40 " />
+              <img src={photo?.FloorImage} alt='UploadedImage' className="w-40 h-40 " />
             </div>
             :
             " "

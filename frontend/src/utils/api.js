@@ -10,7 +10,15 @@ export const loginAction = async (data) => {
 
 export const forgotPsswdAction = async (data) => {
   const response = await axios.post(
-    `${import.meta.env.VITE_STRAPI_URL}/auth/forgot-password`,
+    `${import.meta.env.VITE_STRAPI_URL}/users/forgot_password/`,
+    data
+  );
+  return response;
+};
+
+export const verifyOtpAction = async (data) => {
+  const response = await axios.post(
+    `${import.meta.env.VITE_STRAPI_URL}/users/forgot_password/`,
     data
   );
   return response;

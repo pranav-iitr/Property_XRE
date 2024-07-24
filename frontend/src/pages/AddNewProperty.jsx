@@ -20,7 +20,22 @@ import {
   updateOneUnit,
 } from "../utils/api";
 import { useMatchStore } from "../store/projectStore";
-
+import Modal from "@mui/material/Modal";
+import { BsCheck } from "react-icons/bs";
+import toast, { Toaster } from "react-hot-toast";
+import { useAtom } from "jotai";
+import { floor, unit } from "../store/photo";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 const fetchInitialValue = () => {
   const isLocalStorageDataExist = JSON.parse(localStorage.getItem("newEntry"));
   if (isLocalStorageDataExist) {
@@ -36,6 +51,9 @@ const fetchInitialValue = () => {
 
 const AddPropertyPage = () => {
   const [formData, setFormData] = useState(fetchInitialValue());
+  const [open, setOpen] = useState(false);
+  const [unitValue, setUnitValue] = useAtom(unit);
+  const [floorValue, setFloorValue] = useAtom(floor);
   const {
     personId,
     floorId,
@@ -122,11 +140,147 @@ const AddPropertyPage = () => {
         if (projectId) {
           await updateOneProject(
             {
-               titlw: formData.projectInformation.name ,
+              titlw: formData.projectInformation.name,
             },
             projectId
           );
         } else {
+          console.log(
+            formData,
+            formData?.projectInformation?.name,
+            formData?.projectInformation?.name == ""
+          );
+          if (
+            !formData?.projectInformation?.name ||
+            formData?.projectInformation?.name == ""
+          ) {
+            toast.error("Please Enter Project Name");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.plotNumber ||
+            formData?.projectInformation?.plotNumber == ""
+          ) {
+            toast.error("Please Enter Plot Number");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.totalFloors ||
+            formData?.projectInformation?.totalFloors == ""
+          ) {
+            toast.error("Please Enter Total Floors");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.totalBasements ||
+            formData?.projectInformation?.totalBasements == ""
+          ) {
+            toast.error("Please Enter Total Basements");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.totalArea ||
+            formData?.projectInformation?.totalArea == ""
+          ) {
+            toast.error("Please Enter Total Area");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.vacantArea ||
+            formData?.projectInformation?.vacantArea == ""
+          ) {
+            toast.error("Please Enter Vacant Area");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.perFloorSize ||
+            formData?.projectInformation?.perFloorSize == ""
+          ) {
+            toast.error("Please Enter Per Floor Size");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.buildingType ||
+            formData?.projectInformation?.buildingType == ""
+          ) {
+            toast.error("Please Enter Building Type");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.powerBackup ||
+            formData?.projectInformation?.powerBackup == ""
+          ) {
+            toast.error("Please Enter Power Backup");
+            return;
+          }
+        
+          if (
+            !formData?.projectInformation?.state ||
+            formData?.projectInformation?.state == ""
+          ) {
+            toast.error("Please Enter State");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.city ||
+            formData?.projectInformation?.city == ""
+          ) {
+            toast.error("Please Enter City");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.zone ||
+            formData?.projectInformation?.zone == ""
+          ) {
+            toast.error("Please Enter Zone");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.location ||
+            formData?.projectInformation?.location == ""
+          ) {
+            toast.error("Please Enter Location");
+            return;
+          }
+          if (
+            !formData?.projectInformation?.propertyImage ||
+            formData?.projectInformation?.propertyImage == ""
+          ) {
+            console.log(formData.projectInformation);
+            toast.error("Please Enter Project Image");
+            return;
+          }
+          const Floors = parseInt(formData.projectInformation.totalFloors);
+          const sendData = new FormData();
+          sendData.append("title", formData.projectInformation.name);
+          sendData.append("plot_no", formData.projectInformation.plotNumber);
+          sendData.append("no_of_floor", parseInt(Floors));
+          sendData.append(
+            "toatal_basement",
+            parseInt(formData.projectInformation.totalBasements)
+          );
+          sendData.append("toatal_area", formData.projectInformation.totalArea);
+          sendData.append("vacant_area", formData.projectInformation.vacantArea);
+          sendData.append(
+            "per_floor_area",
+            formData.projectInformation.perFloorSize
+          );
+          sendData.append("type", formData.projectInformation.buildingType);
+          sendData.append(
+            "power_backup",
+            formData.projectInformation.powerBackup == "Yes" ? true : false
+          );
+          sendData.append(
+            "air_conditioned",
+            formData.projectInformation.airConditioned == "Yes" ? true : false
+          );
+          sendData.append("state", formData.projectInformation.state);
+          sendData.append("city", formData.projectInformation.city);
+          sendData.append("zone", formData.projectInformation.zone);
+          sendData.append("location", formData.projectInformation.location);
+          sendData.append("status", "pending");
+          sendData.append("photo", formData.projectInformation.propertyImage);
+          
           const data = {
             title: formData.projectInformation.name,
             plot_no: formData.projectInformation.plotNumber,
@@ -149,15 +303,56 @@ const AddPropertyPage = () => {
             zone: formData.projectInformation.zone,
             location: formData.projectInformation.location,
             status: "pending",
+            photo: formData.projectInformation.propertyImage,
           };
-          await sendProjectInfo(data).then((infoProject) => {
+          await sendProjectInfo(sendData).then((infoProject) => {
             setProjectId(infoProject?.data?.id);
+            setFloorValue(parseInt(Floors));
+            setOpen(true);
           });
           // setProjectId(infoProject.data.id);
         }
         break;
       case 2:
+        if (
+          !formData?.floorInformation?.floorArea ||
+          formData?.floorInformation?.floorArea == ""
+        ) {
+          toast.error("Please Enter Floor Area");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.floorNumber ||
+          formData?.floorInformation?.floorNumber == ""
+        ) {
+          toast.error("Please Enter Floor Number");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.unitsAvailable ||
+          formData?.floorInformation?.unitsAvailable == ""
+        ) {
+          toast.error("Please Enter Units Available");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.totalUnits ||
+          formData?.floorInformation?.totalUnits == ""
+        ) {
+          toast.error("Please Enter Total Units");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.FloorImage ||
+          formData?.floorInformation?.FloorImage == ""
+        ) {
+          toast.error("Please Enter Floor Image");
+          return;
+        }
+        const Units = parseInt(formData.floorInformation.totalUnits);
         if (floorId) {
+          
+
           const sendData = new FormData();
           sendData.append(
             "floor_area",
@@ -180,10 +375,7 @@ const AddPropertyPage = () => {
             "floor_plan",
             formData.floorInformation["FloorImage"]
           );
-          await updateOneFloor(
-            sendData,
-            floorId
-          );
+          await updateOneFloor(sendData, floorId);
         } else {
           const sendData = new FormData();
           sendData.append(
@@ -209,10 +401,66 @@ const AddPropertyPage = () => {
           );
 
           const infoFloor = await sendFloorInfo(sendData);
-          setFloorId(infoFloor?.data?.id);
+          setFloorId(infoFloor?.data?.id).then(() => {
+            setUnitValue(parseInt(Units));
+            setOpen(true);
+            // handleNextForm();
+          });
         }
         break;
       case 3:
+        if (
+          !formData?.unitInformation?.askingRental ||
+          formData?.unitInformation?.askingRental == ""
+        ) {
+          toast.error("Please Enter Asking Rental");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.availabilityFor ||
+          formData?.unitInformation?.availabilityFor == ""
+
+        ) {
+          toast.error("Please Enter Availability For");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.furnishingStatus || formData?.unitInformation?.furnishingStatus == ""
+
+        ) {
+          toast.error("Please Enter Furnishing Status");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.noOfParkings ||
+          formData?.unitInformation?.noOfParkings == ""
+        ) {
+          toast.error("Please Enter No Of Parkings");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.unitArea ||
+          formData?.unitInformation?.unitArea == ""
+        ) {
+          toast.error("Please Enter Unit Area");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.unitNumber ||
+          formData?.unitInformation?.unitNumber == ""
+        ) {
+          toast.error("Please Enter Unit Number");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.ageOfFurnishing ||
+          formData?.unitInformation?.ageOfFurnishing == ""
+        ) {
+          toast.error("Please Enter Age Of Furnishing");
+          return;
+        }
+
+
         if (unitId) {
           await updateOneUnit(
             {
@@ -225,11 +473,11 @@ const AddPropertyPage = () => {
               age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
               property: projectId,
             },
-            
+
             unitId
           );
         } else {
-          const infoUnit = await sendUnitInfo({
+          await sendUnitInfo({
             price: Number(formData.unitInformation["askingRental"]),
             available_for: formData.unitInformation["availabilityFor"],
             furnishng_status: formData.unitInformation["furnishingStatus"],
@@ -238,13 +486,15 @@ const AddPropertyPage = () => {
             unit_no: Number(formData.unitInformation["unitNumber"]),
             age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
             property: projectId,
+          }).then((infoUnit) => {
+            setUnitId(infoUnit?.data?.id);
+            setOpen(true);
+            // handleNextForm();
           });
-          setUnitId(infoUnit?.data?.id);
         }
         break;
       case 4:
         if (personId) {
-          console.log(formData.ownerInformation);
           await updateOnePerson(
             {
               email: formData.ownerInformation["email"],
@@ -267,16 +517,33 @@ const AddPropertyPage = () => {
           });
           setPersonId(infoPerson?.data?.id);
         }
-        navigate("/properties");
-        setCurrentFormIndex(0);
-        setFloorId(null);
-        setPersonId(null);
-        setProjectId(null);
-        setUnitId(null);
+        setUnitValue(unitValue - 1);
+        if (unitValue > 0) {
+          setPersonId(null);
+          setUnitId(null);
+          setCurrentFormIndex(currentFormIndex - 2);
+        } else {
+          setFloorValue(floorValue - 1);
+          setUnitId(null);
+          setPersonId(null);
+          if (floorValue > 0) {
+            setFloorId(null);
+            setCurrentFormIndex(currentFormIndex - 3);
+          } else {
+            setFloorId(null);
+            setProjectId(null);
+            navigate("/properties");
+            setCurrentFormIndex(0);
+          }
+        }
+
+        // setFloorId(null);
+
+        // setProjectId(null);
 
         break;
       default:
-        console.log(formData);
+        console.log();
     }
     handleNextForm();
   };
@@ -381,7 +648,7 @@ const AddPropertyPage = () => {
         navigate("/property");
         break;
       case 4:
-        console.log(formData);
+        console.log();
         if (personId) {
           await updateOnePerson(
             {
@@ -412,7 +679,7 @@ const AddPropertyPage = () => {
         navigate("/property");
         break;
       default:
-        console.log(formData);
+        console.log();
     }
   };
 
@@ -492,12 +759,34 @@ const AddPropertyPage = () => {
 
   return (
     <>
-      <div className="flex justify-center gap-8 mt-4">
+      <div className="flex flex-col tablet:flex-row justify-center gap-8 mt-4 px-5">
+        <Modal
+          open={open}
+          // onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          className="flex justify-center items-center"
+        >
+          <div className="w-96 h-64 bg-white flex justify-evenly rounded-2xl flex-col items-center ">
+            <BsCheck className="text-green-500 bg-green-100 rounded-full text-5xl mt-4" />
+            <h2 className="!text-xl !font-bold  ">Succesfully Added</h2>
+            <p id="modal-modal-description">
+              Property details has been added successfully
+            </p>
+            <button
+              type="button"
+              className="rounded-md bg-red-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-100"
+              onClick={() => setOpen(false)}
+            >
+              Go Back
+            </button>
+          </div>
+        </Modal>
         <div className="border-b border-gray-200 bg-[white] pr-4 py-5 w-[250px] shadow-md rounded-md h-[100%]">
           <AddPropertySteps currentFormIndex={currentFormIndex} />
         </div>
 
-        <div className="w-[50%]">
+        <div className="w-full tablet:w-[50%] ">
           {showProjectInfoOnTop()}
           <div className="border-b border-gray-200 bg-[white] px-4 py-5 sm:px-6 shadow-md rounded-md ">
             <form>

@@ -13,7 +13,7 @@ const MenusConstant = [
 
 export default function AppHeader() {
   const location = useLocation();
-  console.log( "location =>", location);
+
   return (
     <Disclosure as="nav" className="bg-white shadow border">
       {({ open }) => (
@@ -35,8 +35,6 @@ export default function AppHeader() {
                 <div className={`hidden sm:ml-6 sm:flex sm:space-x-8`}>
                   {MenusConstant.map((item) => {
                     
-                      // "inline-flex bg-red-500 items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700";
-                      console.log(item?.title, location.pathname,  `/${item?.title.toLowerCase()}` , location.pathname == item.href );
                       return (
                       <Link
                         key={item.id}
