@@ -11,9 +11,9 @@ class User(AbstractUser):
     
     name = models.CharField(max_length=20,default="")
 
-    phone_no = models.CharField(max_length=10, blank=True,unique=True)
+    
     email = models.EmailField(_('email'), max_length=80, unique=True)
-    rating = models.PositiveIntegerField(default=800)
+    
     otp = models.CharField(max_length=6, blank=True)
     username = None
     # Field for login

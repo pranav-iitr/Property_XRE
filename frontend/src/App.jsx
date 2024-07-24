@@ -93,7 +93,7 @@ function App() {
           </PrivateRoutes>
         }
       />
-      <Route path="*" element={<Navigate  to={ auth?.access_token ? "/propertie" : "/login"} />} />
+      <Route path="*" element={<Navigate  to={ auth?.access_token ? "/properties" : "/login"} />} />
     </Routes>
     </>
   );
