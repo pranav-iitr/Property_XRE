@@ -237,7 +237,17 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+**/.env
 .env
+*/.env
+*/.env.bak
+*/.env.bak/
+*/.env/
+*/.env.bak
+*/.env.bak/
+*/.env/
+*/.venv
+/frontend/.env
 .venv
 env/
 venv/
@@ -254,6 +264,8 @@ venv.bak/
 
 # mkdocs documentation
 /site
+
+static/
 
 # mypy
 .mypy_cache/
