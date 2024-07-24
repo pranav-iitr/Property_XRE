@@ -250,7 +250,20 @@ const AddPropertyPage = () => {
             toast.error("Please Enter Project Image");
             return;
           }
-          const Floors = parseInt(formData.projectInformation.totalFloors);
+          if(formData.projectInformation.totalFloors < 1){
+            toast.error("Total Floors should be greater than 0");
+            return;
+          }
+          if(formData.projectInformation.vacantArea < formData.projectInformation.totalArea){
+            toast.error("Vacant Area should be less than Total Area");
+            return;
+          }
+          if(formData.projectInformation.occupiedArea > formData.projectInformation.totalArea){
+            toast.error("Occupied Area should be less than Total Area");
+            return;
+          }
+
+                const Floors = parseInt(formData.projectInformation.totalFloors);
           const sendData = new FormData();
           sendData.append("title", formData.projectInformation.name);
           sendData.append("plot_no", formData.projectInformation.plotNumber);
@@ -281,30 +294,7 @@ const AddPropertyPage = () => {
           sendData.append("status", "pending");
           sendData.append("photo", formData.projectInformation.propertyImage);
           
-          const data = {
-            title: formData.projectInformation.name,
-            plot_no: formData.projectInformation.plotNumber,
-            no_of_floor: parseInt(formData.projectInformation.totalFloors),
-            toatal_basement: parseInt(
-              formData.projectInformation.totalBasements
-            ),
-            toatal_area: formData.projectInformation.totalArea,
-            vacant_area: formData.projectInformation.vacantArea,
-            per_floor_area: formData.projectInformation.perFloorSize,
-            type: formData.projectInformation.buildingType,
-            power_backup:
-              formData.projectInformation.powerBackup == "Yes" ? true : false,
-            air_conditioned:
-              formData.projectInformation.airConditioned == "Yes"
-                ? true
-                : false,
-            state: formData.projectInformation.state,
-            city: formData.projectInformation.city,
-            zone: formData.projectInformation.zone,
-            location: formData.projectInformation.location,
-            status: "pending",
-            photo: formData.projectInformation.propertyImage,
-          };
+          
           await sendProjectInfo(sendData).then((infoProject) => {
             setProjectId(infoProject?.data?.id);
             setFloorValue(parseInt(Floors));

@@ -30,10 +30,10 @@ const AreaInputWithDropdown = (props) => {
           >
             {[
               { title: "SQ FT", value: "SQ FT" },
-              { title: "SQ YD", value: "SQ YD" },
-              { title: "SQ M", value: "SQ M" },
-              { title: "ACRE", value: "ACRE" },
-              { title: "HECTARE", value: "HECTARE" },
+              // { title: "SQ YD", value: "SQ YD" },
+              // { title: "SQ M", value: "SQ M" },
+              // { title: "ACRE", value: "ACRE" },
+              // { title: "HECTARE", value: "HECTARE" },
             ].map((unit) => (
                 <option key={unit.value} value={unit.value}>
                 {unit.title}
