@@ -213,7 +213,7 @@ const AddPropertyPage = () => {
             toast.error("Please Enter Power Backup");
             return;
           }
-        
+
           if (
             !formData?.projectInformation?.state ||
             formData?.projectInformation?.state == ""
@@ -250,20 +250,26 @@ const AddPropertyPage = () => {
             toast.error("Please Enter Project Image");
             return;
           }
-          if(formData.projectInformation.totalFloors < 1){
+          if (formData.projectInformation.totalFloors < 1) {
             toast.error("Total Floors should be greater than 0");
             return;
           }
-          if(formData.projectInformation.vacantArea < formData.projectInformation.totalArea){
+          if (
+            formData.projectInformation.vacantArea <
+            formData.projectInformation.totalArea
+          ) {
             toast.error("Vacant Area should be less than Total Area");
             return;
           }
-          if(formData.projectInformation.occupiedArea > formData.projectInformation.totalArea){
+          if (
+            formData.projectInformation.occupiedArea >
+            formData.projectInformation.totalArea
+          ) {
             toast.error("Occupied Area should be less than Total Area");
             return;
           }
 
-                const Floors = parseInt(formData.projectInformation.totalFloors);
+          const Floors = parseInt(formData.projectInformation.totalFloors);
           const sendData = new FormData();
           sendData.append("title", formData.projectInformation.name);
           sendData.append("plot_no", formData.projectInformation.plotNumber);
@@ -273,7 +279,10 @@ const AddPropertyPage = () => {
             parseInt(formData.projectInformation.totalBasements)
           );
           sendData.append("toatal_area", formData.projectInformation.totalArea);
-          sendData.append("vacant_area", formData.projectInformation.vacantArea);
+          sendData.append(
+            "vacant_area",
+            formData.projectInformation.vacantArea
+          );
           sendData.append(
             "per_floor_area",
             formData.projectInformation.perFloorSize
@@ -293,8 +302,7 @@ const AddPropertyPage = () => {
           sendData.append("location", formData.projectInformation.location);
           sendData.append("status", "pending");
           sendData.append("photo", formData.projectInformation.propertyImage);
-          
-          
+
           await sendProjectInfo(sendData).then((infoProject) => {
             setProjectId(infoProject?.data?.id);
             setFloorValue(parseInt(Floors));
@@ -341,8 +349,6 @@ const AddPropertyPage = () => {
         }
         const Units = parseInt(formData.floorInformation.totalUnits);
         if (floorId) {
-          
-
           const sendData = new FormData();
           sendData.append(
             "floor_area",
@@ -409,14 +415,13 @@ const AddPropertyPage = () => {
         if (
           !formData?.unitInformation?.availabilityFor ||
           formData?.unitInformation?.availabilityFor == ""
-
         ) {
           toast.error("Please Enter Availability For");
           return;
         }
         if (
-          !formData?.unitInformation?.furnishingStatus || formData?.unitInformation?.furnishingStatus == ""
-
+          !formData?.unitInformation?.furnishingStatus ||
+          formData?.unitInformation?.furnishingStatus == ""
         ) {
           toast.error("Please Enter Furnishing Status");
           return;
@@ -449,7 +454,6 @@ const AddPropertyPage = () => {
           toast.error("Please Enter Age Of Furnishing");
           return;
         }
-
 
         if (unitId) {
           await updateOneUnit(
@@ -502,8 +506,10 @@ const AddPropertyPage = () => {
             name: formData.ownerInformation["name"],
             phone: Number(formData.ownerInformation["mobileNumber"]),
             property: projectId,
+            unit: unitId,
             cam_charges: formData.ownerInformation["cmCharges"],
             vacating_area: formData.ownerInformation["vacantArea"],
+            spoc: formData.ownerInformation["concernedPerson"],
           });
           setPersonId(infoPerson?.data?.id);
         }

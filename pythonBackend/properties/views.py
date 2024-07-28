@@ -3,10 +3,10 @@
 from .models import Properties,Unit,Floor,Features,Owner
 from .constants import propertyConstants
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import PropertiesListSerializer , PropertiesCreateUpdateSerilizer,UnitSerializer,FloorSerializer,OwnerSerializer,unitListSerializer
+from .serializers import PropertiesListSerializer , PropertiesCreateUpdateSerilizer,UnitSerializer,FloorSerializer,OwnerSerializer,unitListSerializer,OwnerDisplaySerializer
 from rest_framework.pagination import PageNumberPagination
 
 property_constants = propertyConstants()
@@ -77,10 +77,12 @@ class PropertiesListView(APIView):
 class ProjectViews(viewsets.ModelViewSet):
     queryset = Properties.objects.all()
     serializer_class = PropertiesCreateUpdateSerilizer
-
+    permission_classes = [IsAuthenticated]
     def create(self, request, *args, **kwargs):
         data = request.data
         print(data)
+        user = request.user
+        data['user'] = user.id
         serializer = PropertiesCreateUpdateSerilizer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -99,7 +101,30 @@ class FloorViews(viewsets.ModelViewSet):
     serializer_class = FloorSerializer
 
 class OwnerViews(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Owner.objects.all()
     serializer_class = OwnerSerializer
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        queryset = Owner.objects.filter(property__user=user)
+        print(queryset)
+        paginator = PageNumberPagination()
+        paginator.page_size = 4
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = OwnerDisplaySerializer(result_page, many=True)
+        total_pages = paginator.page.paginator.num_pages
+        start_index = paginator.page.start_index()
+        end_index = paginator.page.end_index()
+        current_page = paginator.page.number
+        response = paginator.get_paginated_response(serializer.data)
+        response.data['total_pages'] = total_pages
+        response.data['current_page'] = paginator.page.number
+        response.data['total_properties'] = queryset.count()
+        response.data['start_index'] = start_index
+        response.data['end_index'] = end_index
+        response.data['current_page'] = current_page
+        return response
+        # serializer = OwnerDisplaySerializer(queryset, many=True)
+        # return response
 
 # Create your views here.

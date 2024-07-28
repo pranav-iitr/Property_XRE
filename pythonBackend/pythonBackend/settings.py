@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6iu27vw*_r9%=f6rm-=6x7s_pqx*!5*(&ftju)k&qg(s^uhp+@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -136,7 +137,8 @@ USE_I18N = True
 USE_TZ = True
 
 SIMPLE_JWT = {
-
+        'ACCESS_TOKEN_LIFETIME': timedelta(days=24),
+        'REFRESH_TOKEN_LIFETIME': timedelta(days=24),
         'ROTATE_REFRESH_TOKENS': True,
         'BLACKLIST_AFTER_ROTATION': True,
 }

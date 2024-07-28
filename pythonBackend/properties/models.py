@@ -1,6 +1,6 @@
 from django.db import models
 # import user
-from django.contrib.auth.models import User
+from User.models import User
 from .constants import propertyConstants
 # Create your models here.
 
@@ -12,6 +12,7 @@ class Features(models.Model):
 
 
 class Properties(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     title = models.CharField(max_length=100)
     plot_no = models.CharField(max_length=20,null=True,blank=True)
     no_of_floor = models.IntegerField()
@@ -62,9 +63,10 @@ class Owner(models.Model):
     email = models.EmailField()
     phone = models.IntegerField()
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE,blank=True,null=True)
+    unit = models.ForeignKey(Unit, on_delete=models.DO_NOTHING ,blank=True,null=True)
     cam_charges = models.IntegerField()
     vacating_area = models.IntegerField()
+    spoc = models.CharField(max_length=100,default='NA')
 
     def __str__(self):
         return self.name

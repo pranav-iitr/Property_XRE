@@ -74,9 +74,27 @@ class FloorSerializer(serializers.ModelSerializer):
         model = Floor
         fields = "__all__"
 class OwnerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Owner
         fields = "__all__"
+
+class OwnerDisplaySerializer(serializers.ModelSerializer):
+
+    property = serializers.SerializerMethodField()
+    property_id = serializers.SerializerMethodField()
+
+
+
+    class Meta:
+        model = Owner
+        fields = "__all__"
+        
+    def get_property(self, obj):
+        return obj.property.title
+    
+    def get_property_id(self, obj):
+        return obj.property.id
 
 class unitDisplaySerializer(serializers.ModelSerializer):
     
