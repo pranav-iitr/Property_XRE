@@ -137,7 +137,6 @@ class OwnerViews(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         # user = request.user
         queryset = Owner.objects.all()
-       
         paginator = PageNumberPagination()
         paginator.page_size = 5
         result_page = paginator.paginate_queryset(queryset, request)

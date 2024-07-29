@@ -316,12 +316,7 @@ export default function Listing({
                     >
                       PROPERTY
                     </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-medium text-gray-500"
-                    >
-                      UNIT
-                    </th>
+                    
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-sm font-medium text-gray-500 text-center"
@@ -357,9 +352,7 @@ export default function Listing({
                           <td className="hidden tablet:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {property?.property}
                           </td>
-                          <td className="hidden tablet:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {property?.unit}
-                          </td>
+                          
                           <td className="hidden tablet:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                             {property?.cam_charges}
                           </td>
