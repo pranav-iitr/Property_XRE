@@ -1,8 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import ReactPaginate from "react-paginate";
-export default function PropertiesPagination({ meta, Mount }) {
-  
-
+export default function PropertiesPagination({ meta, Mount,setPage,page }) {
   return (
     <div className=" lg:mx-6 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
@@ -21,7 +19,7 @@ export default function PropertiesPagination({ meta, Mount }) {
             <div
               onClick={() => {
                 meta.previous !== null
-                  ? Mount(meta?.previous.split("=")[1])
+                  ? setPage(page - 1)
                   : alert("No more pages");
               }}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
@@ -31,7 +29,10 @@ export default function PropertiesPagination({ meta, Mount }) {
             </div>
             {1 != meta?.currentPage && (
               <a
-                href="#"
+                onClick={() => {
+                  setPage(1);
+                }
+                }
                 className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
               >
                 {1}
@@ -43,7 +44,11 @@ export default function PropertiesPagination({ meta, Mount }) {
                   ...
                 </span>
                 <a
-                  href="#"
+                  onClick={() => {
+                    setPage(meta?.currentPage - 1);
+
+                  }
+                  }
                   className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                 >
                   {meta?.currentPage - 1}
@@ -61,9 +66,12 @@ export default function PropertiesPagination({ meta, Mount }) {
 
             {meta?.currentPage + 1 < meta?.totalPages && (
               <>
-
                 <a
-                  href="#"
+                  onClick={
+                    () => {
+                      setPage(meta?.currentPage + 1);
+                    }
+                  }
                   className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                 >
                   {meta?.currentPage + 1}
@@ -73,11 +81,14 @@ export default function PropertiesPagination({ meta, Mount }) {
                 </span>
               </>
             )}
-            
-            
+
             {meta?.totalPages > meta?.currentPage && (
               <a
-                href="#"
+                onClick={
+                  () => {
+                    setPage(meta?.totalPages);
+                  }
+                }
                 className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
               >
                 {meta?.totalPages}
@@ -87,7 +98,7 @@ export default function PropertiesPagination({ meta, Mount }) {
               href="#"
               onClick={() => {
                 meta.next !== null
-                  ? Mount(meta?.next.split("=")[1])
+                  ? setPage(page + 1)
                   : alert("No more pages");
               }}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"

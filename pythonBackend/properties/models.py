@@ -15,7 +15,7 @@ class Properties(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     title = models.CharField(max_length=100)
     plot_no = models.CharField(max_length=20,null=True,blank=True)
-    no_of_floor = models.IntegerField()
+    no_of_floor = models.IntegerField(default=0,null=True,blank=True)
     toatal_basement = models.IntegerField(null=True,blank=True)
     toatal_area = models.IntegerField(null=True,blank=True)
     vacant_area = models.IntegerField(null=True,blank=True)
@@ -44,6 +44,18 @@ class Floor(models.Model):
     def __str__(self):
         return f"{self.floor_no}"
 
+class Owner(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.IntegerField()
+    property = models.ForeignKey(Properties, on_delete=models.CASCADE)
+    cam_charges = models.IntegerField()
+    vacating_area = models.IntegerField()
+    spoc = models.CharField(max_length=100,default='NA')
+
+    def __str__(self):
+        return self.name
+
 class Unit(models.Model):
     unit_no = models.IntegerField()
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
@@ -54,20 +66,10 @@ class Unit(models.Model):
     available_for = models.CharField(max_length=100)
     furnishng_status = models.CharField(max_length=100)
     age_of_furnishing = models.IntegerField()
+    Owner = models.ForeignKey(Owner, on_delete=models.CASCADE,blank=True,null=True)
     
 
     def __str__(self):
         return f"{self.unit_no}"
-class Owner(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.IntegerField()
-    property = models.ForeignKey(Properties, on_delete=models.CASCADE)
-    unit = models.ForeignKey(Unit, on_delete=models.DO_NOTHING ,blank=True,null=True)
-    cam_charges = models.IntegerField()
-    vacating_area = models.IntegerField()
-    spoc = models.CharField(max_length=100,default='NA')
 
-    def __str__(self):
-        return self.name
 # class Features

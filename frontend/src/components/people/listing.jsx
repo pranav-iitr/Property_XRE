@@ -1,21 +1,33 @@
 import { ArrowUpIcon } from "@heroicons/react/20/solid";
 import { useState, useEffect } from "react";
 import React from "react";
-import { deletePerson, updatePerson } from "../../utils/api";
+import { deletePerson, updatePerson, sendPersonInfo } from "../../utils/api";
 // import OwnerInformation from "../add-property/ownerInformation";
 import { Modal } from "@mui/material";
-
+import { getProjectChoices, getUnitChoices } from "../../utils/api";
 import AreaInputWithDropdown from "../common/AreaInputWithDropdown";
 import CustomInput from "../common/CustomInput";
-
-export default function Listing({ projects, setProjects, setSort_by }) {
+import CustomDropdown from "../common/CustomDropdown";
+import toast from "react-hot-toast";
+export default function Listing({
+  projects,
+  setProjects,
+  setSort_by,
+  open,
+  setOpen,
+  types,
+  setTypes,
+}) {
   const [id, setId] = useState(true);
   const [type, setType] = useState(false);
   const [title, setTitle] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [units, setUnits] = useState([]);
+  const [un_id, setUn_id] = useState(0);
+  // const [] = useState(false);
   const handleClose = () => setOpen(false);
-  const [selected, setSelected] = useState(1);
+  const [props, setProps] = useState([]);
   const [formData, setFormData] = useState({});
+
   useEffect(() => {
     setSort_by(id ? "id" : "-id");
   }, [id]);
@@ -25,6 +37,33 @@ export default function Listing({ projects, setProjects, setSort_by }) {
   useEffect(() => {
     setSort_by(title ? "title" : "-title");
   }, [title]);
+  useEffect(() => {
+    console.log(types);
+    if (types === "add") {
+      getProjectChoices().then((response) => {
+        console.log(response);
+        setProps(
+          response?.data?.map((project) => {
+            return { title: project.title, value: project.id };
+          })
+        );
+      });
+    }
+    console.log(props);
+  }, [types]);
+
+  useEffect(() => {
+    if (formData?.p_id) {
+      getUnitChoices(formData?.p_id).then((response) => {
+        console.log(response);
+        setUnits(
+          response?.data?.map((unit) => {
+            return { title: unit.unit_no, value: unit.id };
+          })
+        );
+      });
+    }
+  }, [formData?.p_id]);
 
   const handleDelete = async (id) => {
     const response = await deletePerson(id)
@@ -35,23 +74,6 @@ export default function Listing({ projects, setProjects, setSort_by }) {
       .catch((err) => {
         console.log(err);
       });
-  };
-  const getValue = (type, name) => {
-    // check if formdata has the key
-
-    return "";
-  };
-  const updateInputValue = (value, event, type, check = null) => {
-    let name = null;
-    if (check) {
-      name = check;
-    } else {
-      name = event?.target?.name;
-    }
-    const newFormData = { ...formData };
-    newFormData[type][name] = value;
-
-    setFormData(newFormData);
   };
 
   return (
@@ -140,10 +162,34 @@ export default function Listing({ projects, setProjects, setSort_by }) {
                   getValue={() => formData?.vacantArea}
                 />
               </div>
+              {types === "add" && (
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <CustomDropdown
+                    title="Property"
+                    name="p_id"
+                    options={props}
+                    inputProps={{
+                      onChange: (e) => {
+                        console.log("check", e.target.value);
+                        setFormData({ ...formData, p_id: e.target.value });
+                      },
+                    }}
+                    getValue={() => formData?.p_id}
+                  />
+                  <CustomDropdown
+                    title="Unit"
+                    name="unit"
+                    options={units}
+                    inputProps={{
+                      onChange: (e) => setUn_id(e.target.value),
+                    }}
+                    getValue={() => un_id}
+                  />
+                </div>
+              )}
               <button
                 onClick={() => {
-                 
-                  const data ={
+                  const data = {
                     name: formData?.name,
                     email: formData?.email,
                     phone: formData?.mobileNumber,
@@ -151,21 +197,36 @@ export default function Listing({ projects, setProjects, setSort_by }) {
                     cam_charges: formData?.cmCharges,
                     vacating_area: formData?.vacantArea,
                     spoc: formData?.concernedPerson,
-                    property:formData?.p_id,
+                    property: formData?.p_id,
+                  };
+                  if (types === "add") {
+                    data["unit"] = un_id;
+                    sendPersonInfo(data)
+                      .then((res) => {
+                        console.log(res);
+                        toast.success("Owner Added Successfully");
+                        setOpen(false);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  } else {
+                    updatePerson(id, data)
+                      .then((res) => {
+                        console.log(res);
+                        setProjects(
+                          projects.map((project) =>
+                            project.id === id
+                              ? { ...project, ...data }
+                              : project
+                          )
+                        );
+                        setOpen(false);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
                   }
-                  updatePerson(id, data).then((res) => {
-                    console.log(res);
-                    setProjects(
-                      projects.map((project) =>
-                        project.id === id ? { ...project, ...data } : project
-                      )
-                    );
-                    setOpen(false);
-                  }).catch((err) => {
-                    console.log(err);
-                  }
-                  );
-                 
                 }}
                 type="button"
                 class="inline-flex mt-5 items-center justify-center rounded-md bg-red-900 px-3 py-2 text-sm font-light text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -316,7 +377,6 @@ export default function Listing({ projects, setProjects, setSort_by }) {
                                   vacantArea: property?.vacating_area,
                                   concernedPerson: property?.spoc,
                                   p_id: property?.property_id,
-
                                 });
                               }}
                               type="button"

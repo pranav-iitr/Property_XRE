@@ -145,11 +145,6 @@ const AddPropertyPage = () => {
             projectId
           );
         } else {
-          console.log(
-            formData,
-            formData?.projectInformation?.name,
-            formData?.projectInformation?.name == ""
-          );
           if (
             !formData?.projectInformation?.name ||
             formData?.projectInformation?.name == ""
@@ -255,7 +250,7 @@ const AddPropertyPage = () => {
             return;
           }
           if (
-            formData.projectInformation.vacantArea <
+            formData.projectInformation.vacantArea >
             formData.projectInformation.totalArea
           ) {
             toast.error("Vacant Area should be less than Total Area");
@@ -265,6 +260,8 @@ const AddPropertyPage = () => {
             formData.projectInformation.occupiedArea >
             formData.projectInformation.totalArea
           ) {
+          toast.error(`Occupied Area ${formData.projectInformation.occupiedArea > formData.projectInformation.totalArea} should be less than Total Area ${formData.projectInformation.totalArea}`);  
+
             toast.error("Occupied Area should be less than Total Area");
             return;
           }
@@ -488,6 +485,44 @@ const AddPropertyPage = () => {
         }
         break;
       case 4:
+        if (
+          !formData?.ownerInformation?.email ||
+          !/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(
+            formData?.ownerInformation?.email
+          )
+        ) {
+          toast.error("Please Enter Correct Email");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.name ||
+          formData?.ownerInformation?.name.lenght < 3
+        ) {
+          toast.error("Please Enter Name");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.mobileNumber ||
+          !/^[6-9]+[0-9]{9}$/.test(formData?.ownerInformation?.mobileNumber)
+        ) {
+          toast.error("Please Enter Correct Mobile Number");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.cmCharges ||
+          formData?.ownerInformation?.cmCharges == ""
+        ) {
+          toast.error("Please Enter CAM Charges");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.vacantArea ||
+          formData?.ownerInformation?.vacantArea == ""
+        ) {
+          toast.error("Please Enter Vacant Area");
+          return;
+        }
+
         if (personId) {
           await updateOnePerson(
             {
@@ -497,6 +532,7 @@ const AddPropertyPage = () => {
               property: projectId,
               cam_charges: formData.ownerInformation["cmCharges"],
               vacating_area: formData.ownerInformation["vacantArea"],
+              unit: unitId,
             },
             personId
           );
@@ -517,14 +553,14 @@ const AddPropertyPage = () => {
         if (unitValue > 0) {
           setPersonId(null);
           setUnitId(null);
-          setCurrentFormIndex(currentFormIndex - 2);
+          setCurrentFormIndex(3);
         } else {
           setFloorValue(floorValue - 1);
           setUnitId(null);
           setPersonId(null);
           if (floorValue > 0) {
             setFloorId(null);
-            setCurrentFormIndex(currentFormIndex - 3);
+            setCurrentFormIndex(2);
           } else {
             setFloorId(null);
             setProjectId(null);
@@ -548,6 +584,126 @@ const AddPropertyPage = () => {
     e.preventDefault();
     switch (AddPropertyStepConstant[currentFormIndex].id) {
       case 1:
+        if (
+          !formData?.projectInformation?.name ||
+          formData?.projectInformation?.name == ""
+        ) {
+          toast.error("Please Enter Project Name");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.plotNumber ||
+          formData?.projectInformation?.plotNumber == ""
+        ) {
+          toast.error("Please Enter Plot Number");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.totalFloors ||
+          formData?.projectInformation?.totalFloors == ""
+        ) {
+          toast.error("Please Enter Total Floors");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.totalBasements ||
+          formData?.projectInformation?.totalBasements == ""
+        ) {
+          toast.error("Please Enter Total Basements");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.totalArea ||
+          formData?.projectInformation?.totalArea == ""
+        ) {
+          toast.error("Please Enter Total Area");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.vacantArea ||
+          formData?.projectInformation?.vacantArea == ""
+        ) {
+          toast.error("Please Enter Vacant Area");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.perFloorSize ||
+          formData?.projectInformation?.perFloorSize == ""
+        ) {
+          toast.error("Please Enter Per Floor Size");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.buildingType ||
+          formData?.projectInformation?.buildingType == ""
+        ) {
+          toast.error("Please Enter Building Type");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.powerBackup ||
+          formData?.projectInformation?.powerBackup == ""
+        ) {
+          toast.error("Please Enter Power Backup");
+          return;
+        }
+
+        if (
+          !formData?.projectInformation?.state ||
+          formData?.projectInformation?.state == ""
+        ) {
+          toast.error("Please Enter State");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.city ||
+          formData?.projectInformation?.city == ""
+        ) {
+          toast.error("Please Enter City");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.zone ||
+          formData?.projectInformation?.zone == ""
+        ) {
+          toast.error("Please Enter Zone");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.location ||
+          formData?.projectInformation?.location == ""
+        ) {
+          toast.error("Please Enter Location");
+          return;
+        }
+        if (
+          !formData?.projectInformation?.propertyImage ||
+          formData?.projectInformation?.propertyImage == ""
+        ) {
+          console.log(formData.projectInformation);
+          toast.error("Please Enter Project Image");
+          return;
+        }
+        if (formData.projectInformation.totalFloors < 1) {
+          toast.error("Total Floors should be greater than 0");
+          return;
+        }
+        if (
+          formData.projectInformation.vacantArea >
+          formData.projectInformation.totalArea
+        ) {
+          toast.error("Vacant Area should be less than Total Area");
+          return;
+        }
+        if (
+          formData.projectInformation.occupiedArea >
+          formData.projectInformation.totalArea
+        ) {
+          toast.error(`Occupied Area ${formData.projectInformation.occupiedArea} should be less than Total Area ${formData.projectInformation.totalArea}`);  
+          toast.error("Occupied Area should be less than Total Area");
+          return;
+        }
+
         if (projectId) {
           await updateOneProject(
             {
@@ -564,6 +720,41 @@ const AddPropertyPage = () => {
         navigate("/property");
         break;
       case 2:
+        if (
+          !formData?.floorInformation?.floorArea ||
+          formData?.floorInformation?.floorArea == ""
+        ) {
+          toast.error("Please Enter Floor Area");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.floorNumber ||
+          formData?.floorInformation?.floorNumber == ""
+        ) {
+          toast.error("Please Enter Floor Number");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.unitsAvailable ||
+          formData?.floorInformation?.unitsAvailable == ""
+        ) {
+          toast.error("Please Enter Units Available");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.totalUnits ||
+          formData?.floorInformation?.totalUnits == ""
+        ) {
+          toast.error("Please Enter Total Units");
+          return;
+        }
+        if (
+          !formData?.floorInformation?.FloorImage ||
+          formData?.floorInformation?.FloorImage == ""
+        ) {
+          toast.error("Please Enter Floor Image");
+          return;
+        }
         if (floorId) {
           await updateOneFloor(
             {
@@ -604,6 +795,55 @@ const AddPropertyPage = () => {
         navigate("/property");
         break;
       case 3:
+        if (
+          !formData?.unitInformation?.askingRental ||
+          formData?.unitInformation?.askingRental == ""
+        ) {
+          toast.error("Please Enter Asking Rental");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.availabilityFor ||
+          formData?.unitInformation?.availabilityFor == ""
+        ) {
+          toast.error("Please Enter Availability For");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.furnishingStatus ||
+          formData?.unitInformation?.furnishingStatus == ""
+        ) {
+          toast.error("Please Enter Furnishing Status");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.noOfParkings ||
+          formData?.unitInformation?.noOfParkings == ""
+        ) {
+          toast.error("Please Enter No Of Parkings");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.unitArea ||
+          formData?.unitInformation?.unitArea == ""
+        ) {
+          toast.error("Please Enter Unit Area");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.unitNumber ||
+          formData?.unitInformation?.unitNumber == ""
+        ) {
+          toast.error("Please Enter Unit Number");
+          return;
+        }
+        if (
+          !formData?.unitInformation?.ageOfFurnishing ||
+          formData?.unitInformation?.ageOfFurnishing == ""
+        ) {
+          toast.error("Please Enter Age Of Furnishing");
+          return;
+        }
         if (unitId) {
           await updateOneUnit(
             {
@@ -644,7 +884,42 @@ const AddPropertyPage = () => {
         navigate("/property");
         break;
       case 4:
-        console.log();
+        if (
+          !formData?.ownerInformation?.email ||
+          formData?.ownerInformation?.email == ""
+        ) {
+          toast.error("Please Enter Email");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.name ||
+          formData?.ownerInformation?.name.lenght < 3
+        ) {
+          toast.error("Please Enter Name");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.mobileNumber ||
+          formData?.ownerInformation?.mobileNumber == ""
+        ) {
+          toast.error("Please Enter Mobile Number");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.cmCharges ||
+          formData?.ownerInformation?.cmCharges == ""
+        ) {
+          toast.error("Please Enter CAM Charges");
+          return;
+        }
+        if (
+          !formData?.ownerInformation?.vacantArea ||
+          formData?.ownerInformation?.vacantArea == ""
+        ) {
+          toast.error("Please Enter Vacant Area");
+          return;
+        }
+
         if (personId) {
           await updateOnePerson(
             {
@@ -672,6 +947,8 @@ const AddPropertyPage = () => {
           });
           setPersonId(infoPerson.data.data.id);
         }
+
+        setOpen(true);
         navigate("/property");
         break;
       default:

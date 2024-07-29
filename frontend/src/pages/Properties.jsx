@@ -17,6 +17,7 @@ const Properties = () => {
   const [filterLocation, setfilterLocation] = useState("");
   const [sort_by, setSort_by] = useState("id");
   const [value, setValue] = useState([0,10000]);
+  const [page, setPage] = useState(1);
   const [projFilter, setProjFilter] = useState({
     label: "project",
     value: "project",
@@ -26,6 +27,7 @@ const Properties = () => {
     setfilterCity("");
     setfilterZone("");
     setfilterType("");
+    setPage(1);
     setfilterLocation(null);
     setValue([0,10000]);
   };
@@ -57,6 +59,13 @@ const Properties = () => {
         })
       );
       setProjects(response.data.results);
+    }).catch((error) => {
+      // check for 401
+      if(error.response.status === 401){
+        localStorage.clear();
+        window.location.reload();
+      }
+      console.log(error);
     });
   };
   // useEffect(() => {
@@ -82,9 +91,13 @@ const Properties = () => {
     if(projFilter){
       filters += `&project=${projFilter.value}`;
     }
+    filters += `&page=${page}`;
     filters += `&sort_by=${sort_by}`;
     setFilter(filters);
     Mount(1, filters);
+  }, [filterZone, filterCity, filterType,filterLocation,sort_by,value,projFilter,page]);
+  useEffect(() => {
+    setPage(1);
   }, [filterZone, filterCity, filterType,filterLocation,sort_by,value,projFilter]);
   return (
     <div>
@@ -106,7 +119,7 @@ const Properties = () => {
       setProjFilter={setProjFilter}
        />
       <PropertyListing projects={projects} setSort_by={setSort_by}   />
-      <PropertiesPagination meta={meta} Mount={Mount} />
+      <PropertiesPagination meta={meta} Mount={Mount} setPage={setPage} page={page} />
     </div>
   );
 };

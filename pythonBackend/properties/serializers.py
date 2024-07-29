@@ -58,6 +58,7 @@ class PropertiesCreateUpdateSerilizer(serializers.Serializer):
     photo = serializers.ImageField()
     location = serializers.CharField()
     status = serializers.CharField()
+    
 
     def create(self, validated_data):
         return Properties.objects.create(**validated_data)

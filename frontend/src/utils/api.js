@@ -26,9 +26,16 @@ export const verifyOtpAction = async (data) => {
 
 
 export const sendProjectInfo = async (data) => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const headers = {
+    Authorization: `Bearer ${auth.access_token}`,
+  };
   const response = await axios.post(
     `${import.meta.env.VITE_STRAPI_URL}/properties/projects/`,
-    data
+    data,{
+      headers: headers
+    }
+    
   );
   return response;
 }
@@ -51,15 +58,27 @@ export const sendUnitInfo = async (data) => {
 }
 
 export const sendPersonInfo = async (data) => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const headers = {
+    Authorization: `Bearer ${auth.access_token}`,
+  };
   const response = await axios.post(
     `${import.meta.env.VITE_STRAPI_URL}/properties/owners/`,
-    data
+    data,{
+      headers: headers
+    }
   );
   return response;
 }
 
 export const getAllProjects = async (page=1,filters="") => {
-  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/list?page=${page}${filters}`);
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const headers = {
+    Authorization: `Bearer ${auth.access_token}`,
+  };
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/list?page=${page}${filters}`,{
+    headers: headers
+  });
   return response;
 }
 
@@ -104,12 +123,12 @@ export const updateOnePerson = async (data, id) => {
   return response;
 }
 
-export const getPersons = async () => {
+export const getPersons = async (page=1) => {
   const user = JSON.parse(localStorage.getItem("auth"));
   const headers = {
     Authorization: `Bearer ${user.access_token}`,
   };
-  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/owners/`,{
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/owners/?page=${page}`,{
     headers: headers
   });
   return response;
@@ -136,3 +155,25 @@ export const updatePerson = async (id, data) => {
   });
   return response;
 };
+
+export const getProjectChoices = async () => {
+  const user = JSON.parse(localStorage.getItem("auth"));
+  const headers = {
+    Authorization: `Bearer ${user.access_token}`,
+  };
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/projects/`,{
+    headers: headers
+  });
+  return response;
+}
+
+export const getUnitChoices = async (id) => {
+  const user = JSON.parse(localStorage.getItem("auth"));
+  const headers = {
+    Authorization: `Bearer ${user.access_token}`,
+  };
+  const response = await axios.get(`${import.meta.env.VITE_STRAPI_URL}/properties/unit/?property=${id}`,{
+    headers: headers
+  });
+  return response;
+}
