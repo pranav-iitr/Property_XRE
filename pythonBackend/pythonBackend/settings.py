@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    "whitenoise.runserver_nostatic",
+    # "whitenoise",
     'django.contrib.staticfiles',
     "corsheaders",
     'rest_framework',
@@ -81,14 +81,21 @@ WSGI_APPLICATION = 'pythonBackend.wsgi.application'
 STATIC_ROOT=os.path.join(BASE_DIR,'static')
 STATIC_URL = "/static/"
 
-STORAGE = {
-    
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
-
+STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+        "media": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+            "LOCATION": os.path.join(BASE_DIR, "media"),
+        },
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+            "LOCATION": os.path.join(BASE_DIR, "media"),
+        },
+        
+       
+    }
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media_files/'
