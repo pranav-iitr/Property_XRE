@@ -40,6 +40,7 @@ def create_filter_kwargs(params):
     
     if "location" in params:
         filter_kwargs['location__icontains'] = params['location']
+        filter_kwargs['title__icontains'] = params['location']
 
     return filter_kwargs
 
