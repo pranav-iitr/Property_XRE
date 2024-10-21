@@ -10,8 +10,8 @@ const Properties = () => {
   const [projects, setProjects] = useState([]);
   const [types, setTypes] = useState([]);
   const [cites, setCites] = useState([]);
-  const [zones, setZones] = useState([]);
-  const [filterZone, setfilterZone] = useState("");
+  const [sub_locations, setSubLocations] = useState([]);
+  const [filterSubLocation, setfilterSubLocation] = useState("");
   const [filterCity, setfilterCity] = useState("");
   const [filterType, setfilterType] = useState("");
   const [filterLocation, setfilterLocation] = useState("");
@@ -25,7 +25,7 @@ const Properties = () => {
   const [filter, setFilter] = useState("");
   const reset = () => {
     setfilterCity("");
-    setfilterZone("");
+    setfilterSubLocation("");
     setfilterType("");
     setPage(1);
     setfilterLocation(null);
@@ -53,9 +53,9 @@ const Properties = () => {
           return { label: type, value: type };
         })
       );
-      setZones(
-        response.data.zones.map((zone) => {
-          return { label: zone, value: zone };
+      setSubLocations(
+        response.data.sub_locations.map((sub_location) => {
+          return { label: sub_location, value: sub_location };
         })
       );
       setProjects(response.data.results);
@@ -76,8 +76,8 @@ const Properties = () => {
     if (filterCity) {
       filters += `&city=${filterCity}`;
     }
-    if (filterZone) {
-      filters += `&zone=${filterZone}`;
+    if (filterSubLocation) {
+      filters += `&sub_location=${filterSubLocation}`;
     }
     if (filterType) {
       filters += `&type=${filterType}`;
@@ -95,22 +95,22 @@ const Properties = () => {
     filters += `&sort_by=${sort_by}`;
     setFilter(filters);
     Mount(1, filters);
-  }, [filterZone, filterCity, filterType,filterLocation,sort_by,value,projFilter,page]);
+  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter,page]);
   useEffect(() => {
     setPage(1);
-  }, [filterZone, filterCity, filterType,filterLocation,sort_by,value,projFilter]);
+  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter]);
   return (
     <div>
       <PropertyHeader
         cites={cites}
         types={types}
-        zones={zones}
+        sub_locations={sub_locations}
         projFilter={projFilter}
         value={value}
         setValue={setValue}
         setProjFilter={setProjFilter}
         setfilterCity={setfilterCity}
-        setfilterZone={setfilterZone}
+        setfilterSubLocation={setfilterSubLocation}
         setfilterType={setfilterType}
         setfilterLocation={setfilterLocation}
         filterLocation={filterLocation}

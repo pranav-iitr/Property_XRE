@@ -71,24 +71,7 @@ export default function OwnerInformation(props) {
               }}
               getValue={() => getValue(type, "concernedPerson")}
             />
-            <AreaInputWithDropdown
-              title="CAM Charges (Sq feet)"
-              name="cmCharges"
-              placeholder="2540"
-              inputProps={{
-                onChange: (e) => updateInputValue(e.target.value, e, type),
-              }}
-              getValue={() => getValue(type, "cmCharges")}
-            />
-            <AreaInputWithDropdown
-              title="Vacant Area"
-              name="vacantArea"
-              placeholder="2540"
-              inputProps={{
-                onChange: (e) => updateInputValue(e.target.value, e, type),
-              }}
-              getValue={() => getValue(type, "vacantArea")}
-            />
+ 
           </div>
         </div>
       </div>

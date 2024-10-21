@@ -28,7 +28,7 @@ export const handleSearchFilter = (
     return;
   }
   const filtered = allPropertyList.filter((item) => {
-    const location = `${item.zone} ${item.city} ${item.states}`.toLowerCase();
+    const location = `${item.sub_location} ${item.city} ${item.states}`.toLowerCase();
     return location.includes(value.toLowerCase());
   });
 

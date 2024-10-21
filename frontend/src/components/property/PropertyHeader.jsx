@@ -28,7 +28,7 @@ export const handleSearchFilter = (
     return;
   }
   const filtered = allPropertyList.filter((item) => {
-    const location = `${item.zone} ${item.city} ${item.states}`.toLowerCase();
+    const location = `${item.sub_location} ${item.city} ${item.states}`.toLowerCase();
     return location.includes(value.toLowerCase());
   });
 
@@ -49,13 +49,13 @@ const project = [
 const FiltersBar = ({
   cites,
   types,
-  zones,
+  sub_locations,
   projFilter,
   value,
   setValue,
   setProjFilter,
   setfilterCity,
-  setfilterZone,
+  setfilterSubLocation,
   setfilterType,
 }) => {
   // const [show, setShow] = useState(false);
@@ -173,8 +173,8 @@ const FiltersBar = ({
         </div>
         <div className="flex items-center gap-2">
           <Select
-            options={zones}
-            placeholder="zone"
+            options={sub_locations}
+            placeholder="sub_location"
             classNames={{
               container: () =>
                 " w-full z-0 tablet:!z-10 !border-none self-stretch rounded-lg  ",
@@ -185,7 +185,7 @@ const FiltersBar = ({
               menuPortal: () => "!w-36 !z-10",
             }}
             onChange={(e) => {
-              setfilterZone(e.value);
+              setfilterSubLocation(e.value);
             }}
           />
         </div>
@@ -236,13 +236,13 @@ const SearchInput = ({ setfilterLocation, filterLocation }) => {
 export default function PropertyHeader({
   cites,
   types,
-  zones,
+  sub_locations,
   projFilter,
   value,
   setValue,
   setProjFilter,
   setfilterCity,
-  setfilterZone,
+  setfilterSubLocation,
   setfilterType,
   setfilterLocation,
   filterLocation,
@@ -309,13 +309,13 @@ export default function PropertyHeader({
             <FiltersBar
               cites={cites}
               types={types}
-              zones={zones}
+              sub_locations={sub_locations}
               projFilter={projFilter}
               value={value}
               setValue={setValue}
               setProjFilter={setProjFilter}
               setfilterCity={setfilterCity}
-              setfilterZone={setfilterZone}
+              setfilterSubLocation={setfilterSubLocation}
               setfilterType={setfilterType}
             />
           </Drawer>
@@ -323,13 +323,13 @@ export default function PropertyHeader({
             <FiltersBar
               cites={cites}
               types={types}
-              zones={zones}
+              sub_locations={sub_locations}
               projFilter={projFilter}
               value={value}
               setValue={setValue}
               setProjFilter={setProjFilter}
               setfilterCity={setfilterCity}
-              setfilterZone={setfilterZone}
+              setfilterSubLocation={setfilterSubLocation}
               setfilterType={setfilterType}
             />
           </div>

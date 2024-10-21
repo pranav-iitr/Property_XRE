@@ -35,8 +35,8 @@ def create_filter_kwargs(params):
     if 'city' in params:
         filter_kwargs['city'] = params['city']
     
-    if 'zone' in params:
-        filter_kwargs['zone'] = params['zone']
+    if 'sub_location' in params:
+        filter_kwargs['sub_location'] = params['sub_location']
     
     if "location" in params:
         filter_kwargs['location__icontains'] = params['location']
@@ -82,10 +82,10 @@ class PropertiesListView(APIView):
         response.data['end_index'] = end_index
         response.data['current_page'] = current_page
         unique_cities = full_properties.values('city').distinct()
-        unique_zones = [zone[0] for zone in property_constants.zone_choices]
+        unique_sub_locations = [sub_location[0] for sub_location in property_constants.zone_choices]
         unique_types = [type[0] for type in property_constants.type_choices]
         response.data['cities'] = unique_cities
-        response.data['zones'] = unique_zones
+        response.data['sub_locations'] = unique_sub_locations
         response.data['types'] = unique_types
 
         return response

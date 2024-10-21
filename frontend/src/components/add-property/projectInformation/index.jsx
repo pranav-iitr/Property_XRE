@@ -119,7 +119,7 @@ export default function ProjectInformation(props) {
               getValue={() => getValue(type, "vacantArea")}
             />
 
-            <AreaInputWithDropdown
+            {/* <AreaInputWithDropdown
               title="Occupied Area"
               name="occupiedArea"
               placeholder="2540"
@@ -127,12 +127,24 @@ export default function ProjectInformation(props) {
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
               getValue={() => getValue(type, "occupiedArea")}
+            /> */}
+            <CustomInput
+              title="Maintenance Charges"
+              type="number"
+              name="maintenanceCharges"
+              inputProps={{
+                onChange: (e) => updateInputValue(e.target.value, e, type),
+              }}
+              getValue={() => getValue(type, "maintenanceCharges")}
             />
-
             <CustomDropdown
               title="Features"
               name="feature"
-              options={[{ title: "Modern Infra", value: "modern_infra" }]}
+              options={[
+                { title: "A Grade", value: "A Grade" },
+                { title: "B Grade", value: "B Grade" },
+                { title: "C Grade", value: "C Grade" },
+              ]}
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
@@ -157,6 +169,11 @@ export default function ProjectInformation(props) {
                 { title: "Residential", value: "Residential" },
                 { title: "Industrial", value: "Industrial" },
                 { title: "Agricultural", value: "Agricultural" },
+                { title: "IT/ITES", value: "IT/ITES" },
+                { title: "Institutional", value: "Institutional" },
+                { title: "Hotel/Hospital", value: "Hotel/Hospital" },
+                { title: "Warehouse", value: "Warehouse" },
+                { title: "Land", value: "Land" },
                 { title: "Other", value: "Other" },
               ]}
               inputProps={{
@@ -227,25 +244,24 @@ export default function ProjectInformation(props) {
             />
 
             <CustomDropdown
-              title="Zone"
-              name="zone"
+              title="Sub Location"
+              name="Sub Location"
               options={[
-                {"title": "North", "value": "North"},
-                {"title": "South", "value": "South"},
-                {"title": "East", "value": "East"},
-                {"title": "West", "value": "West"},
-                {"title": "Central", "value": "Central"},
-                {"title": "North-East", "value": "North-East"},
-                {"title": "North-West", "value": "North-West"},
-                {"title": "South-East", "value": "South-East"},
-                {"title": "South-West", "value": "South-West"},
-                {"title": "Other", "value": "Other"}
-            ]
-            }
+                { title: "North", value: "North" },
+                { title: "South", value: "South" },
+                { title: "East", value: "East" },
+                { title: "West", value: "West" },
+                { title: "Central", value: "Central" },
+                { title: "North-East", value: "North-East" },
+                { title: "North-West", value: "North-West" },
+                { title: "South-East", value: "South-East" },
+                { title: "South-West", value: "South-West" },
+                { title: "Other", value: "Other" },
+              ]}
               inputProps={{
                 onChange: (e) => updateInputValue(e.target.value, e, type),
               }}
-              getValue={() => getValue(type, "zone")}
+              getValue={() => getValue(type, "sub_location")}
             />
 
             <div className="col-span-full">

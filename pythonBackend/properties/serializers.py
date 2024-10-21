@@ -54,7 +54,7 @@ class PropertiesCreateUpdateSerilizer(serializers.Serializer):
     toatal_basement = serializers.IntegerField()
     state = serializers.CharField()
     city = serializers.CharField()
-    zone = serializers.CharField()
+    sub_location = serializers.CharField()
     photo = serializers.ImageField()
     location = serializers.CharField()
     status = serializers.CharField()

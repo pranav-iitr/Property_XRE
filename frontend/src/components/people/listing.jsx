@@ -141,26 +141,7 @@ export default function Listing({
                   }}
                   getValue={() => formData?.concernedPerson}
                 />
-                <AreaInputWithDropdown
-                  title="CAM Charges (Sq feet)"
-                  name="cmCharges"
-                  placeholder="2540"
-                  inputProps={{
-                    onChange: (e) =>
-                      setFormData({ ...formData, cmCharges: e.target.value }),
-                  }}
-                  getValue={() => formData?.cmCharges}
-                />
-                <AreaInputWithDropdown
-                  title="Vacant Area"
-                  name="vacantArea"
-                  placeholder="2540"
-                  inputProps={{
-                    onChange: (e) =>
-                      setFormData({ ...formData, vacantArea: e.target.value }),
-                  }}
-                  getValue={() => formData?.vacantArea}
-                />
+                
               </div>
               {types === "add" && (
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

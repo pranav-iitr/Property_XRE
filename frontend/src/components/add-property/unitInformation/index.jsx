@@ -13,19 +13,60 @@ const UnitInformationForm = (props) => {
     const unMount = async () => {
       const res = await getOneUnit(unitId);
 
-      updateInputValue(res.data.data.attributes.unitArea, null, "unitInformation", 'unitArea')
-      updateInputValue(res.data.data.attributes.unitNumber, null, "unitInformation", 'unitNumber')
-      updateInputValue(res.data.data.attributes.numberOfParkings, null, "unitInformation", 'noOfParkings')
-      updateInputValue(res.data.data.attributes.askingRental, null, "unitInformation", 'askingRental')
-      updateInputValue(res.data.data.attributes.furnishingStatus, null, "unitInformation", 'furnishingStatus')
-      updateInputValue(res.data.data.attributes.availabilityFor, null, "unitInformation", 'availabilityFor')
-
-
-    }
+      updateInputValue(
+        res.data.data.attributes.unitArea,
+        null,
+        "unitInformation",
+        "unitArea"
+      );
+      updateInputValue(
+        res.data.data.attributes.unitNumber,
+        null,
+        "unitInformation",
+        "unitNumber"
+      );
+      updateInputValue(
+        res.data.data.attributes.numberOfParkings,
+        null,
+        "unitInformation",
+        "noOfParkings"
+      );
+      updateInputValue(
+        res.data.data.attributes.askingRental,
+        null,
+        "unitInformation",
+        "askingRental"
+      );
+      updateInputValue(
+        res.data.data.attributes.furnishingStatus,
+        null,
+        "unitInformation",
+        "furnishingStatus"
+      );
+      updateInputValue(
+        res.data.data.attributes.availabilityFor,
+        null,
+        "unitInformation",
+        "availabilityFor"
+      );
+      updateInputValue(
+        res.data.data.attributes.ageOfFurnishing,
+        null,
+        "unitInformation",
+        "ageOfFurnishing"
+      );
+      updateInputValue(
+        res.data.data.attributes.dateAvailable,
+        null,
+        "unitInformation",
+        "dateAvailable"
+      );
+      
+    };
     if (unitId) {
       unMount();
     }
-  }, [])
+  }, []);
   return (
     <div className="space-y-12">
       <div className="border-b border-gray-900/10 pb-12">
@@ -78,7 +119,12 @@ const UnitInformationForm = (props) => {
           <CustomDropdown
             title="Availability For"
             name="availabilityFor"
-            options={[{ title: "Lease", value: "lease" }]}
+            options={[
+              { title: "Lease", value: "lease" },
+              { title: "Sale", value: "Sale" },
+              { title: "Both", value: "Both" },
+              { title: "None", value: "None" },
+            ]}
             inputProps={{
               onChange: (e) => updateInputValue(e.target.value, e, type),
             }}
@@ -87,7 +133,11 @@ const UnitInformationForm = (props) => {
           <CustomDropdown
             title="Furnishing Status"
             name="furnishingStatus"
-            options={[{ title: "Furnished", value: "Furnished" }, { title: "Semi Furnished", value: "Semi Furnished" }, { title: "Un Furnished", value: "Un Furnished" }]}
+            options={[
+              { title: "Furnished", value: "Furnished" },
+              { title: "Semi Furnished", value: "Semi Furnished" },
+              { title: "Un Furnished", value: "Un Furnished" },
+            ]}
             inputProps={{
               onChange: (e) => updateInputValue(e.target.value, e, type),
             }}
@@ -101,6 +151,15 @@ const UnitInformationForm = (props) => {
               onChange: (e) => updateInputValue(e.target.value, e, type),
             }}
             getValue={() => getValue(type, "ageOfFurnishing")}
+          />
+          <CustomInput
+            title="Date of Availablity"
+            type="date"
+            name="dateAvailable"
+            inputProps={{
+              onChange: (e) => updateInputValue(e.target.value, e, type),
+            }}
+            getValue={() => getValue(type, "floorNumber")}
           />
         </div>
       </div>

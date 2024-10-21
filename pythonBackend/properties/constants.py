@@ -6,6 +6,11 @@ class propertyConstants():
     ('Residential', 'Residential'),
     ('Industrial', 'Industrial'),
     ('Agricultural', 'Agricultural'),
+    ('IT/ITES', 'IT/ITES'),
+    ('Institutional', 'Institutional'),
+    ('Hotel/Hospital', 'Hotel/Hospital'),
+    ('Warehouse', 'Warehouse'),
+    ('Land', 'Land'),
     ('Other', 'Other'),
     )
 

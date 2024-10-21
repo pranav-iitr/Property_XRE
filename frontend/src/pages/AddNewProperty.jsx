@@ -224,10 +224,10 @@ const AddPropertyPage = () => {
             return;
           }
           if (
-            !formData?.projectInformation?.zone ||
-            formData?.projectInformation?.zone == ""
+            !formData?.projectInformation?.sub_location ||
+            formData?.projectInformation?.sub_location == ""
           ) {
-            toast.error("Please Enter Zone");
+            toast.error("Please Enter Sub Location");
             return;
           }
           if (
@@ -256,15 +256,16 @@ const AddPropertyPage = () => {
             toast.error("Vacant Area should be less than Total Area");
             return;
           }
-          if (
-            formData.projectInformation.occupiedArea >
-            formData.projectInformation.totalArea
-          ) {
-          toast.error(`Occupied Area ${formData.projectInformation.occupiedArea > formData.projectInformation.totalArea} should be less than Total Area ${formData.projectInformation.totalArea}`);  
+          
+          // if (
+          //   formData.projectInformation.occupiedArea >
+          //   formData.projectInformation.totalArea
+          // ) {
+          // toast.error(`Occupied Area ${formData.projectInformation.occupiedArea > formData.projectInformation.totalArea} should be less than Total Area ${formData.projectInformation.totalArea}`);
 
-            toast.error("Occupied Area should be less than Total Area");
-            return;
-          }
+          //   toast.error("Occupied Area should be less than Total Area");
+          //   return;
+          // }
 
           const Floors = parseInt(formData.projectInformation.totalFloors);
           const sendData = new FormData();
@@ -295,10 +296,14 @@ const AddPropertyPage = () => {
           );
           sendData.append("state", formData.projectInformation.state);
           sendData.append("city", formData.projectInformation.city);
-          sendData.append("zone", formData.projectInformation.zone);
+          sendData.append(
+            "sub_location",
+            formData.projectInformation.sub_location
+          );
           sendData.append("location", formData.projectInformation.location);
           sendData.append("status", "pending");
           sendData.append("photo", formData.projectInformation.propertyImage);
+          sendData.append("maintenance_charges", formData.projectInformation.maintenanceCharges);
 
           await sendProjectInfo(sendData).then((infoProject) => {
             setProjectId(infoProject?.data?.id);
@@ -451,6 +456,10 @@ const AddPropertyPage = () => {
           toast.error("Please Enter Age Of Furnishing");
           return;
         }
+        if(!formData?.unitInformation?.dateAvailable || formData?.unitInformation?.dateAvailable == ""){
+          toast.error("Please Enter Date Available");
+          return;
+        }
 
         if (unitId) {
           await updateOneUnit(
@@ -463,6 +472,7 @@ const AddPropertyPage = () => {
               unit_no: Number(formData.unitInformation["unitNumber"]),
               age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
               property: projectId,
+              date_available: formData.unitInformation["dateAvailable"],
             },
 
             unitId
@@ -476,6 +486,7 @@ const AddPropertyPage = () => {
             area: Number(formData.unitInformation["unitArea"]),
             unit_no: Number(formData.unitInformation["unitNumber"]),
             age_of_furnishing: formData.unitInformation["ageOfFurnishing"],
+            date_available: formData.unitInformation["dateAvailable"],
             property: projectId,
           }).then((infoUnit) => {
             setUnitId(infoUnit?.data?.id);
@@ -663,10 +674,10 @@ const AddPropertyPage = () => {
           return;
         }
         if (
-          !formData?.projectInformation?.zone ||
-          formData?.projectInformation?.zone == ""
+          !formData?.projectInformation?.sub_location ||
+          formData?.projectInformation?.sub_location == ""
         ) {
-          toast.error("Please Enter Zone");
+          toast.error("Please Enter Sub Location");
           return;
         }
         if (
@@ -699,7 +710,9 @@ const AddPropertyPage = () => {
           formData.projectInformation.occupiedArea >
           formData.projectInformation.totalArea
         ) {
-          toast.error(`Occupied Area ${formData.projectInformation.occupiedArea} should be less than Total Area ${formData.projectInformation.totalArea}`);  
+          toast.error(
+            `Occupied Area ${formData.projectInformation.occupiedArea} should be less than Total Area ${formData.projectInformation.totalArea}`
+          );
           toast.error("Occupied Area should be less than Total Area");
           return;
         }
