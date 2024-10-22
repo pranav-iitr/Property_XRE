@@ -61,7 +61,7 @@ export default function PropertyHeader({ setPOpen, setPtype }) {
               <div className="relative z-10 flex px-2 tablet:px-0">
                 <div className="flex flex-shrink-0 items-center">
                   <h1 className="truncate text-2xl font-bold text-gray-900">
-                    {"People"}
+                    {"Contact"}
                   </h1>
                 </div>
               </div>

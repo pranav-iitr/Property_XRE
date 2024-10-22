@@ -52,11 +52,14 @@ const FiltersBar = ({
   sub_locations,
   projFilter,
   value,
+  owner,
+  setfilterOwner,
   setValue,
   setProjFilter,
   setfilterCity,
   setfilterSubLocation,
   setfilterType,
+
 }) => {
   // const [show, setShow] = useState(false);
   // const [value, setValue] = useState([0, 100]);
@@ -90,6 +93,25 @@ const FiltersBar = ({
       </div>
 
       <div className="flex flex-col tablet:flex-row mt-5 tablet:mt-0 gap-6 text-gray-500">
+      <div className="flex items-center gap-2">
+  
+          <Select
+            options={owner}
+            placeholder="owners"
+            onChange={(e) => {
+              setfilterOwner(e.value);
+            }}
+            classNames={{
+              container: () =>
+                " w-full z-0 tablet:!z-10 !border-none self-stretch rounded-lg  ",
+              indicatorSeparator: () => "hidden",
+              control: () => "!border-none",
+              menuList: () => "!w-36 tablet:!z-10",
+              menu: () => "!w-36 !z-[50]",
+              menuPortal: () => "!w-36 !z-[10]",
+            }}
+          />
+        </div>
         <div className="flex items-center gap-2">
           <Select
             options={project}

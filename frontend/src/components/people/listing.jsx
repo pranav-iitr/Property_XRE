@@ -9,6 +9,9 @@ import AreaInputWithDropdown from "../common/AreaInputWithDropdown";
 import CustomInput from "../common/CustomInput";
 import CustomDropdown from "../common/CustomDropdown";
 import toast from "react-hot-toast";
+import {
+  XMarkIcon
+} from "@heroicons/react/24/outline";
 export default function Listing({
   projects,
   setProjects,
@@ -88,8 +91,19 @@ export default function Listing({
         aria-describedby="modal-modal-description"
       >
         <>
+          
           <div className=" w-full h-full flex justify-center items-center  space-y-12">
             <div className="w-[80vw] bg-white border-b border-gray-900/10 p-12">
+            <div className="flex justify-end">
+            <button
+              onClick={handleClose}
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg text-sm font-light shadow-sm "
+            >
+              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+            
+            </button>
+          </div>
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Owner Information
               </h2>

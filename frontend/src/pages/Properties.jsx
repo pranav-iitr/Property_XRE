@@ -11,6 +11,8 @@ const Properties = () => {
   const [types, setTypes] = useState([]);
   const [cites, setCites] = useState([]);
   const [sub_locations, setSubLocations] = useState([]);
+  const [owner, setOwner] = useState([]);
+  const [filterOwner, setfilterOwner] = useState("");
   const [filterSubLocation, setfilterSubLocation] = useState("");
   const [filterCity, setfilterCity] = useState("");
   const [filterType, setfilterType] = useState("");
@@ -22,6 +24,7 @@ const Properties = () => {
     label: "project",
     value: "project",
   })
+  
   const [filter, setFilter] = useState("");
   const reset = () => {
     setfilterCity("");
@@ -30,6 +33,7 @@ const Properties = () => {
     setPage(1);
     setfilterLocation(null);
     setValue([0,10000]);
+    setOwner([]);
   };
   const Mount = async (page = 1, filters = "") => {
     await getAllProjects(page, filters).then((response) => {
@@ -58,7 +62,15 @@ const Properties = () => {
           return { label: sub_location, value: sub_location };
         })
       );
+
+      setOwner(
+        response.data.owners.map((owner) => {
+          return { label: owner, value: owner };
+        })
+      );
+
       setProjects(response.data.results);
+
     }).catch((error) => {
       // check for 401
       if(error.response.status === 401){
@@ -91,14 +103,17 @@ const Properties = () => {
     if(projFilter){
       filters += `&project=${projFilter.value}`;
     }
+    if (filterOwner) {
+      filters += `&owner=${filterOwner}`;
+    }
     filters += `&page=${page}`;
     filters += `&sort_by=${sort_by}`;
     setFilter(filters);
     Mount(1, filters);
-  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter,page]);
+  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter,page,filterOwner]);
   useEffect(() => {
     setPage(1);
-  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter]);
+  }, [filterSubLocation, filterCity, filterType,filterLocation,sort_by,value,projFilter,filterOwner]);
   return (
     <div>
       <PropertyHeader
@@ -114,6 +129,9 @@ const Properties = () => {
         setfilterType={setfilterType}
         setfilterLocation={setfilterLocation}
         filterLocation={filterLocation}
+        owner={owner}
+        setfilterOwner={setfilterOwner}
+        
       />
       <AppliedFiltersBar reset={reset} project={projFilter} 
       setProjFilter={setProjFilter}

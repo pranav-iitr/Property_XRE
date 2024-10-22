@@ -8,7 +8,7 @@ import {authAtom} from "../../store/auth";
 const MenusConstant = [
   { id: 1, title: "Dashboard", href: "/dashboard" },
   { id: 2, title: "Properties", href: "/properties" },
-  { id: 3, title: "People", href: "/people" },
+  { id: 3, title: "Contacts", href: "/contacts" },
   { id: 4, title: "Proposals", href: "/proposals" },
   { id: 5, title: "Reporting & Analytics", href: "/reporting" },
 ];

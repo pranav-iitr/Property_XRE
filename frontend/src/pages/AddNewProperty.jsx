@@ -1064,7 +1064,7 @@ const AddPropertyPage = () => {
               className="rounded-md bg-red-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-100"
               onClick={() => setOpen(false)}
             >
-              Go Back
+              Saved
             </button>
           </div>
         </Modal>

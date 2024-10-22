@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PropertiesListSerializer , PropertiesCreateUpdateSerilizer,UnitSerializer,FloorSerializer,OwnerSerializer,unitListSerializer,OwnerDisplaySerializer
 from rest_framework.pagination import PageNumberPagination
-
+from django.db.models import Count
 property_constants = propertyConstants()
 
 def create_filter_kwargs(params):
@@ -41,6 +41,9 @@ def create_filter_kwargs(params):
     if "location" in params:
         filter_kwargs['location__icontains'] = params['location']
         filter_kwargs['title__icontains'] = params['location']
+    if 'owner' in params:
+        filter_kwargs['unit__Owner_name'] = params['owner']
+
 
     return filter_kwargs
 
@@ -84,9 +87,11 @@ class PropertiesListView(APIView):
         unique_cities = full_properties.values('city').distinct()
         unique_sub_locations = [sub_location[0] for sub_location in property_constants.zone_choices]
         unique_types = [type[0] for type in property_constants.type_choices]
+        unique_clients = Owner.objects.values('name').distinct()
         response.data['cities'] = unique_cities
         response.data['sub_locations'] = unique_sub_locations
         response.data['types'] = unique_types
+        response.data['owners'] = unique_clients
 
         return response
 

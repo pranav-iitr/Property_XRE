@@ -3,6 +3,7 @@ from django.db import models
 from User.models import User
 from .constants import propertyConstants
 from django.core.validators import FileExtensionValidator
+
 # Create your models here.
 
 property_constants = propertyConstants()
@@ -51,8 +52,8 @@ class Owner(models.Model):
     email = models.EmailField()
     phone = models.IntegerField()
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
-  
     spoc = models.CharField(max_length=100,default='NA')
+    ownership_type = models.CharField(max_length=100,choices=property_constants.ownership_choices,null=True,blank=True)
 
     def __str__(self):
         return self.name

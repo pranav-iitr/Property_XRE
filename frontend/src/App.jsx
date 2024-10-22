@@ -2,7 +2,7 @@ import ForgotPassword from "./components/common/ForgotPassword";
 import LoginPage from "./pages/LoginPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Properties from "./pages/Properties";
-import People from "./pages/People";
+import People from "./pages/Contact";
 import AppHeader from "./components/common/AppHeader";
 import AppBreadCrumb from "./components/common/AppBreadCrumb";
 import AddNewProperty from "./pages/AddNewProperty";
@@ -54,7 +54,7 @@ function App() {
         }
       />
       <Route
-        path="/people"
+        path="/contacts"
         element={
           <PrivateRoutes>
             <AppHeader />

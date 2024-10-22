@@ -25,4 +25,12 @@ class propertyConstants():
     ('South-East', 'South-East'),
     ('South-West', 'South-West'),
     ('Other', 'Other'),
-)
+
+    )
+
+    ownership_choices = (
+        ('Owner', 'Owner'),
+        ('Tenant', 'Tenant'),
+        ('Broker', 'Broker'),
+       
+    )
