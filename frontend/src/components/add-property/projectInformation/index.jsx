@@ -245,7 +245,7 @@ export default function ProjectInformation(props) {
 
             <CustomDropdown
               title="Sub Location"
-              name="Sub Location"
+              name="sub_location"
               options={[
                 { title: "North", value: "North" },
                 { title: "South", value: "South" },

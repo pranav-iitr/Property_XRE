@@ -227,6 +227,8 @@ const AddPropertyPage = () => {
             !formData?.projectInformation?.sub_location ||
             formData?.projectInformation?.sub_location == ""
           ) {
+            // toast.error("Please Enter Sub Location");
+            console.log(formData.projectInformation);
             toast.error("Please Enter Sub Location");
             return;
           }
@@ -519,20 +521,20 @@ const AddPropertyPage = () => {
           toast.error("Please Enter Correct Mobile Number");
           return;
         }
-        if (
-          !formData?.ownerInformation?.cmCharges ||
-          formData?.ownerInformation?.cmCharges == ""
-        ) {
-          toast.error("Please Enter CAM Charges");
-          return;
-        }
-        if (
-          !formData?.ownerInformation?.vacantArea ||
-          formData?.ownerInformation?.vacantArea == ""
-        ) {
-          toast.error("Please Enter Vacant Area");
-          return;
-        }
+        // if (
+        //   !formData?.ownerInformation?.cmCharges ||
+        //   formData?.ownerInformation?.cmCharges == ""
+        // ) {
+        //   toast.error("Please Enter CAM Charges");
+        //   return;
+        // }
+        // if (
+        //   !formData?.ownerInformation?.vacantArea ||
+        //   formData?.ownerInformation?.vacantArea == ""
+        // ) {
+        //   toast.error("Please Enter Vacant Area");
+        //   return;
+        // }
 
         if (personId) {
           await updateOnePerson(
@@ -541,7 +543,7 @@ const AddPropertyPage = () => {
               name: formData.ownerInformation["name"],
               phone: Number(formData.ownerInformation["mobileNumber"]),
               property: projectId,
-              cam_charges: formData.ownerInformation["cmCharges"],
+              // cam_charges: formData.ownerInformation["cmCharges"],
               vacating_area: formData.ownerInformation["vacantArea"],
               unit: unitId,
             },
@@ -554,7 +556,7 @@ const AddPropertyPage = () => {
             phone: Number(formData.ownerInformation["mobileNumber"]),
             property: projectId,
             unit: unitId,
-            cam_charges: formData.ownerInformation["cmCharges"],
+            // cam_charges: formData.ownerInformation["cmCharges"],
             vacating_area: formData.ownerInformation["vacantArea"],
             spoc: formData.ownerInformation["concernedPerson"],
           });
@@ -918,20 +920,20 @@ const AddPropertyPage = () => {
           toast.error("Please Enter Mobile Number");
           return;
         }
-        if (
-          !formData?.ownerInformation?.cmCharges ||
-          formData?.ownerInformation?.cmCharges == ""
-        ) {
-          toast.error("Please Enter CAM Charges");
-          return;
-        }
-        if (
-          !formData?.ownerInformation?.vacantArea ||
-          formData?.ownerInformation?.vacantArea == ""
-        ) {
-          toast.error("Please Enter Vacant Area");
-          return;
-        }
+        // if (
+        //   !formData?.ownerInformation?.cmCharges ||
+        //   formData?.ownerInformation?.cmCharges == ""
+        // ) {
+        //   toast.error("Please Enter CAM Charges");
+        //   return;
+        // }
+        // if (
+        //   !formData?.ownerInformation?.vacantArea ||
+        //   formData?.ownerInformation?.vacantArea == ""
+        // ) {
+        //   toast.error("Please Enter Vacant Area");
+        //   return;
+        // }
 
         if (personId) {
           await updateOnePerson(
