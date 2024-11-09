@@ -14,6 +14,38 @@ class Features(models.Model):
 
 
 class Properties(models.Model):
+
+    
+     
+
+    INDUSTRIAL_LIFT_CHOICES = [
+        ('Yes', 'Yes'),
+        ('No', 'No'),
+        ('Can be done', 'Can be done')
+    ]
+
+    FLOOR_TYPE_CHOICES = [
+        ('RCC', 'RCC'),
+        ('VDF', 'VDF'),
+        ('FM II', 'FM II'),
+        ('Tremix', 'Tremix')
+    ]
+
+    BUILDING_TYPE_CHOICES = [
+        ('RCC', 'RCC'),
+        ('PEB', 'PEB')
+    ]
+
+
+
+    owner_name = models.CharField(max_length=255, blank=True, null=True)
+    owner_phone_no = models.CharField(max_length=20, blank=True, null=True)
+    owner_email_id = models.EmailField(blank=True, null=True)
+    manager_name = models.CharField(max_length=255, blank=True, null=True)
+    manager_phone_no = models.CharField(max_length=20, blank=True, null=True)
+    manager_email_id = models.EmailField(blank=True, null=True)
+
+
     user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     title = models.CharField(max_length=100)
     plot_no = models.CharField(max_length=20,null=True,blank=True)
@@ -32,7 +64,18 @@ class Properties(models.Model):
     location = models.CharField(max_length=100,null=True,blank=True)
     photo = models.FileField(upload_to='properties/',null=True,blank=True, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'png', 'dwg', 'jpg','dxf'])])
     status = models.CharField(max_length=100,default='Pending')
+
+    
     maintenance_charges = models.IntegerField(null=True,blank=True)
+    property_type = models.CharField(max_length=255, blank=True, null=True)
+    area_in_sqft = models.FloatField(blank=True, null=True)
+    mezzanine_area_in_sqft = models.FloatField(blank=True, null=True)
+    industrial_lift = models.CharField(max_length=50, choices=INDUSTRIAL_LIFT_CHOICES, blank=True, null=True)
+    lift_capacity_in_ton = models.FloatField(blank=True, null=True)
+    type_of_floor = models.CharField(max_length=50, choices=FLOOR_TYPE_CHOICES, blank=True, null=True)
+    type_of_building = models.CharField(max_length=50, choices=BUILDING_TYPE_CHOICES, blank=True, null=True)
+    google_latitude = models.FloatField(blank=True, null=True)
+    google_longitude = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.title
